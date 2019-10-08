@@ -1,4 +1,7 @@
 #!/bin/sh
+firewall-cmd --zone=public --permanent --add-service=https
+firewall-cmd --reload
+
 wget https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip
 sudo unzip chef-automate_linux_amd64.zip
 echo vm.max_map_count=262144 | sudo tee -a /etc/sysctl.conf
