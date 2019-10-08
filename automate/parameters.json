@@ -71,6 +71,9 @@
         "publicIpAddressType": {
             "value": "Dynamic"
         },
+        "dnsLabelPrefix": {
+            "value": null
+        },
         "publicIpAddressSku": {
             "value": "Basic"
         },
