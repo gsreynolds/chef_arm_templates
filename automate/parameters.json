@@ -1,0 +1,118 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "uksouth"
+        },
+        "networkInterfaceName": {
+            "value": "automate"
+        },
+        "enableAcceleratedNetworking": {
+            "value": true
+        },
+        "networkSecurityGroupName": {
+            "value": "automate-nsg"
+        },
+        "networkSecurityGroupRules": {
+            "value": [
+                {
+                    "name": "HTTPS",
+                    "properties": {
+                        "priority": 300,
+                        "protocol": "TCP",
+                        "access": "Allow",
+                        "direction": "Inbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "443"
+                    }
+                },
+                {
+                    "name": "SSH",
+                    "properties": {
+                        "priority": 320,
+                        "protocol": "TCP",
+                        "access": "Allow",
+                        "direction": "Inbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "22"
+                    }
+                }
+            ]
+        },
+        "subnetName": {
+            "value": "default"
+        },
+        "virtualNetworkName": {
+            "value": "chef-vnet"
+        },
+        "addressPrefixes": {
+            "value": [
+                "10.1.0.0/24"
+            ]
+        },
+        "subnets": {
+            "value": [
+                {
+                    "name": "default",
+                    "properties": {
+                        "addressPrefix": "10.1.0.0/24"
+                    }
+                }
+            ]
+        },
+        "publicIpAddressName": {
+            "value": "automate-ip"
+        },
+        "publicIpAddressType": {
+            "value": "Dynamic"
+        },
+        "publicIpAddressSku": {
+            "value": "Basic"
+        },
+        "virtualMachineName": {
+            "value": "automate"
+        },
+        "osDiskType": {
+            "value": "Premium_LRS"
+        },
+        "dataDisks": {
+            "value": [
+                {
+                    "lun": 0,
+                    "createOption": "attach",
+                    "caching": "None",
+                    "writeAcceleratorEnabled": false,
+                    "id": null,
+                    "name": "automate_DataDisk_0",
+                    "storageAccountType": null,
+                    "diskSizeGB": null
+                }
+            ]
+        },
+        "dataDiskResources": {
+            "value": [
+                {
+                    "name": "automate_DataDisk_0",
+                    "sku": "Premium_LRS",
+                    "properties": {
+                        "diskSizeGB": 512,
+                        "creationData": {
+                            "createOption": "empty"
+                        }
+                    }
+                }
+            ]
+        },
+        "virtualMachineSize": {
+            "value": "Standard_D8s_v3"
+        },
+        "adminUsername": {
+            "value": "chef"
+        }
+    }
+}
