@@ -113,6 +113,9 @@
         },
         "adminUsername": {
             "value": "chef"
-        }
+        },
+        "adminPublicKey": {
+          "value": "null"
+      }
     }
 }
