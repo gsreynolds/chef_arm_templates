@@ -118,7 +118,13 @@
             "value": "chef"
         },
         "adminPublicKey": {
-          "value": "null"
-      }
+          "value": null
+        },
+        "automateFQDN": {
+            "value": null
+        },
+        "automateLicense": {
+            "value": null
+        }
     }
 }

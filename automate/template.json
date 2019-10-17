@@ -61,6 +61,12 @@
         },
         "adminPublicKey": {
             "type": "secureString"
+        },
+        "automateFQDN": {
+            "type": "string"
+        },
+        "automateLicense": {
+            "type": "string"
         }
     },
     "variables": {
@@ -227,7 +233,7 @@
                         ]
                     },
                     "commandToExecute": {
-                        "value": "sh script.sh"
+                        "value": "[concat('sh script.sh', ' \"', parameters('automateFQDN'), '\" \"', parameters('automateLicense'), '\"')]"
                     }
                 }
             },
