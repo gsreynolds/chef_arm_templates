@@ -159,6 +159,9 @@
         },
         "adminPublicKey": {
           "value": null
+        },
+        "backendCount": {
+          "value": 3
         }
     }
 }

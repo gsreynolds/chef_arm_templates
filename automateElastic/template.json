@@ -61,6 +61,9 @@
         },
         "adminPublicKey": {
             "type": "secureString"
+        },
+        "backendCount": {
+            "type": "int"
         }
     },
     "variables": {
@@ -100,7 +103,7 @@
             },
             "copy": {
               "name": "networkInterfacesCopy",
-              "count": 3
+              "count": "[parameters('backendCount')]"
             }
         },
         {
@@ -128,7 +131,7 @@
             },
             "copy": {
               "name": "publicIpAddressCopy",
-              "count": 3
+              "count": "[parameters('backendCount')]"
             }
         },
         {
@@ -214,7 +217,7 @@
             },
             "copy": {
               "name": "virtualMachineCopy",
-              "count": 3
+              "count": "[parameters('backendCount')]"
             }
         },
         {
@@ -248,7 +251,7 @@
             ],
             "copy": {
               "name": "customScriptCopy",
-              "count": 3
+              "count": "[parameters('backendCount')]"
             }
         }
     ],
