@@ -61,12 +61,6 @@
         },
         "adminPublicKey": {
             "type": "secureString"
-        },
-        "automateFQDN": {
-            "type": "string"
-        },
-        "automateLicense": {
-            "type": "string"
         }
     },
     "variables": {
@@ -76,13 +70,13 @@
     },
     "resources": [
         {
-            "name": "[parameters('networkInterfaceName')]",
+            "name": "[concat(parameters('networkInterfaceName'), copyIndex())]",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2018-10-01",
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkSecurityGroups/', parameters('networkSecurityGroupName'))]",
-                "[concat('Microsoft.Network/publicIpAddresses/', parameters('publicIpAddressName'))]"
+                "[concat('Microsoft.Network/publicIpAddresses/', parameters('publicIpAddressName'), copyIndex())]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -94,7 +88,7 @@
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIpAddress": {
-                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', concat(parameters('publicIpAddressName'), copyIndex()))]"
                             }
                         }
                     }
@@ -103,6 +97,10 @@
                 "networkSecurityGroup": {
                     "id": "[variables('nsgId')]"
                 }
+            },
+            "copy": {
+              "name": "networkInterfacesCopy",
+              "count": 3
             }
         },
         {
@@ -115,18 +113,22 @@
             }
         },
         {
-            "name": "[parameters('publicIpAddressName')]",
+            "name": "[concat(parameters('publicIpAddressName'), copyIndex())]",
             "type": "Microsoft.Network/publicIpAddresses",
             "apiVersion": "2019-02-01",
             "location": "[parameters('location')]",
             "properties": {
                 "publicIpAllocationMethod": "[parameters('publicIpAddressType')]",
                 "dnsSettings": {
-                    "domainNameLabel": "[parameters('dnsLabelPrefix')]"
+                    "domainNameLabel": "[concat(parameters('dnsLabelPrefix'), copyIndex())]"
                 }
             },
             "sku": {
                 "name": "[parameters('publicIpAddressSku')]"
+            },
+            "copy": {
+              "name": "publicIpAddressCopy",
+              "count": 3
             }
         },
         {
@@ -144,13 +146,13 @@
             }
         },
         {
-            "name": "[parameters('virtualMachineName')]",
+            "name": "[concat(parameters('virtualMachineName'), copyIndex())]",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2019-03-01",
             "location": "[parameters('location')]",
             "dependsOn": [
                 "managedDiskResources",
-                "[concat('Microsoft.Network/networkInterfaces/', parameters('networkInterfaceName'))]"
+                "[concat('Microsoft.Network/networkInterfaces/', parameters('networkInterfaceName'), copyIndex())]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -172,16 +174,16 @@
                     "copy": [
                         {
                             "name": "dataDisks",
-                            "count": "[length(parameters('dataDisks'))]",
+                            "count": 1,
                             "input": {
-                                "lun": "[parameters('dataDisks')[copyIndex('dataDisks')].lun]",
-                                "createOption": "[parameters('dataDisks')[copyIndex('dataDisks')].createOption]",
-                                "caching": "[parameters('dataDisks')[copyIndex('dataDisks')].caching]",
-                                "writeAcceleratorEnabled": "[parameters('dataDisks')[copyIndex('dataDisks')].writeAcceleratorEnabled]",
-                                "diskSizeGB": "[parameters('dataDisks')[copyIndex('dataDisks')].diskSizeGB]",
+                                "lun": "[parameters('dataDisks')[copyIndex('virtualMachineCopy')].lun]",
+                                "createOption": "[parameters('dataDisks')[copyIndex('virtualMachineCopy')].createOption]",
+                                "caching": "[parameters('dataDisks')[copyIndex('virtualMachineCopy')].caching]",
+                                "writeAcceleratorEnabled": "[parameters('dataDisks')[copyIndex('virtualMachineCopy')].writeAcceleratorEnabled]",
+                                "diskSizeGB": "[parameters('dataDisks')[copyIndex('virtualMachineCopy')].diskSizeGB]",
                                 "managedDisk": {
-                                    "id": "[coalesce(parameters('dataDisks')[copyIndex('dataDisks')].id, if(equals(parameters('dataDisks')[copyIndex('dataDisks')].name, json('null')), json('null'), resourceId('Microsoft.Compute/disks', parameters('dataDisks')[copyIndex('dataDisks')].name)))]",
-                                    "storageAccountType": "[parameters('dataDisks')[copyIndex('dataDisks')].storageAccountType]"
+                                    "id": "[coalesce(parameters('dataDisks')[copyIndex('virtualMachineCopy')].id, if(equals(parameters('dataDisks')[copyIndex('virtualMachineCopy')].name, json('null')), json('null'), resourceId('Microsoft.Compute/disks', parameters('dataDisks')[copyIndex('virtualMachineCopy')].name)))]",
+                                    "storageAccountType": "[parameters('dataDisks')[copyIndex('virtualMachineCopy')].storageAccountType]"
                                 }
                             }
                         }
@@ -190,12 +192,12 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaceName'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('networkInterfaceName'), copyIndex()))]"
                         }
                     ]
                 },
                 "osProfile": {
-                    "computerName": "[parameters('virtualMachineName')]",
+                    "computerName": "[concat(parameters('virtualMachineName'), copyIndex())]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": true,
@@ -209,10 +211,14 @@
                         }
                     }
                 }
+            },
+            "copy": {
+              "name": "virtualMachineCopy",
+              "count": 3
             }
         },
         {
-            "name": "microsoft.custom-script-linux-automate",
+            "name": "[concat('microsoft.custom-script-linux-automateElastic', copyIndex())]",
             "apiVersion": "2015-01-01",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -222,34 +228,30 @@
                 },
                 "parameters": {
                     "vmName": {
-                        "value": "automate"
+                        "value": "[concat('automateElastic', copyIndex())]"
                     },
                     "location": {
                         "value": "uksouth"
                     },
                     "fileUris": {
                         "value": [
-                          "https://raw.githubusercontent.com/gsreynolds/chef_arm_templates/master/automate/script.sh"
+                          "https://raw.githubusercontent.com/gsreynolds/chef_arm_templates/master/automateElastic/script.sh"
                         ]
                     },
                     "commandToExecute": {
-                        "value": "[concat('sh script.sh', ' \"', parameters('automateFQDN'), '\" \"', parameters('automateLicense'), '\"')]"
+                        "value": "[concat('sh script.sh')]"
                     }
                 }
             },
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
-            ]
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'), copyIndex())]"
+            ],
+            "copy": {
+              "name": "customScriptCopy",
+              "count": 3
+            }
         }
     ],
     "outputs": {
-        "adminUsername": {
-            "type": "string",
-            "value": "[parameters('adminUsername')]"
-        },
-        "fqdn": {
-            "value": "[reference(resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))).dnsSettings.fqdn]",
-            "type": "string"
-        }
     }
 }
