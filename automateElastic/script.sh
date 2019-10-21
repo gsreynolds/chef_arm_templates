@@ -28,7 +28,25 @@ echo "/dev/mapper/$VG-$LV $MOUNT xfs defaults 0 0" | sudo tee -a /etc/fstab
 mount -a
 
 # Install Open Distro for ElasticSearch
-curl https://d3g5vo6xdbdb9a.cloudfront.net/yum/opendistroforelasticsearch-artifacts.repo -o /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
+echo '[elasticsearch-6.x]
+name=Elasticsearch repository for 6.x packages
+baseurl=https://artifacts.elastic.co/packages/oss-6.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+
+[opendistroforelasticsearch-artifacts-repo]
+name=Release RPM artifacts of OpenDistroForElasticsearch
+baseurl=https://d3g5vo6xdbdb9a.cloudfront.net/yum/noarch/
+enabled=1
+gpgkey=https://d3g5vo6xdbdb9a.cloudfront.net/GPG-KEY-opendistroforelasticsearch
+gpgcheck=1
+repo_gpgcheck=1
+autorefresh=1
+type=rpm-md' > /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
+yum updateinfo
 yum install -y java-11-openjdk-devel
 yum install -y opendistroforelasticsearch-0.7.0-1
 
@@ -40,15 +58,12 @@ yum install -y opendistroforelasticsearch-0.7.0-1
 # curl -XGET "https://localhost:9200/_cat/indices?v&pretty" -u admin:admin --insecure
 
 echo "
+node.name: $HOSTNAME
+" >> /etc/elasticsearch/elasticsearch.yml
+
+echo '
 cluster.name: chef-insights
 network.host: 0.0.0.0
-discovery.seed_hosts:
-  - automateElastic0
-  - automateElastic1
-  - automateElastic2
-cluster.initial_master_nodes:
-  - automateElastic0
-  - automateElastic1
-  - automateElastic2
-" >> /etc/elasticsearch/elasticsearch.yml
+discovery.zen.ping.unicast.hosts: ["automateElastic0", "automateElastic1", "automateElastic2"]
+' >> /etc/elasticsearch/elasticsearch.yml
 systemctl start elasticsearch.service
