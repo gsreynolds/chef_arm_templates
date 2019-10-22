@@ -1,5 +1,7 @@
 # Chef ARM Templates
 
+![Overview](/images/overview.svg)
+
 ## Before using
 
 * Add elastic search root CA and use securityadmin.sh to replace demo certificates (https://opendistro.github.io/for-elasticsearch-docs/docs/security-configuration/)

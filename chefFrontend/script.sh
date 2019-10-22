@@ -109,6 +109,7 @@ fi
 # Configure data collector
 # chef-server-ctl set-secret data_collector token TOKEN
 # chef-server-ctl restart nginx && chef-server-ctl restart opscode-erchef
+# chef-server-ctl test
 # ...
 
 
