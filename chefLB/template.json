@@ -51,8 +51,42 @@
                         "properties": {}
                     }
                 ],
-                "loadBalancingRules": [],
-                "probes": [],
+                "loadBalancingRules": [
+                    {
+                        "name": "chef-ha",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('name')), '/frontendIPConfigurations/LoadBalancerFrontEnd')]"
+                            },
+                            "frontendPort": 443,
+                            "backendPort": 443,
+                            "enableFloatingIP": false,
+                            "idleTimeoutInMinutes": 4,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": false,
+                            "backendAddressPool": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('name')), '/backendAddressPools/chef-ha-frontends')]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('name')), '/probes/https')]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "https",
+                        "properties": {
+                            "protocol": "Https",
+                            "port": 443,
+                            "requestPath": "/",
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2
+                        }
+                    }
+                ],
                 "inboundNatRules": [],
                 "outboundRules": [],
                 "inboundNatPools": []
