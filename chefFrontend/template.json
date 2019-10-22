@@ -64,6 +64,12 @@
         },
         "frontendCount": {
             "type": "int"
+        },
+        "lbName": {
+            "type": "string"
+        },
+        "lbPoolName": {
+            "type": "string"
         }
     },
     "variables": {
@@ -93,7 +99,12 @@
                             "privateIpAddress": "[concat('10.1.0.', copyIndex(20))]",
                             "publicIpAddress": {
                                 "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', concat(parameters('publicIpAddressName'), copyIndex()))]"
-                            }
+                            },
+                            "loadBalancerBackendAddressPools": [
+                                {
+                                    "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/loadBalancers/backendAddressPools',parameters('lbName'),parameters('lbPoolName'))]"
+                                }
+                            ]
                         }
                     }
                 ],
