@@ -52,7 +52,7 @@ if [ "${HOSTNAME: -1}" = "0" ]; then
   chef-backend-ctl create-cluster --accept-license -y
 else
   echo "Initial follower"
-  sleep 120
+  sleep 300
   chef-backend-ctl join-cluster chefBackend0 --accept-license -s /etc/chef-backend/chef-backend-secrets.json -y
 fi
 

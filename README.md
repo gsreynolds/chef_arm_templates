@@ -14,5 +14,5 @@ VNET: 10.1.0.0/24
 automateElastic: 10.1.0.4, 10.1.0.5, 10.1.0.6
 automate: 10.1.0.7
 chefBackend: 10.1.0.10, 10.1.0.11, 10.1.0.12
-chefFrontEnd: 10.1.0.20, 10.1.0.21, 10.1.0.22
+chefFrontEnd: 10.1.0.20, 10.1.0.21
 chefLB: 10.1.0.30
