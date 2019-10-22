@@ -1,0 +1,154 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "uksouth"
+        },
+        "networkInterfaceName": {
+            "value": "chefBackend"
+        },
+        "enableAcceleratedNetworking": {
+            "value": true
+        },
+        "networkSecurityGroupName": {
+            "value": "chefBackend-nsg"
+        },
+        "networkSecurityGroupRules": {
+            "value": [
+                {
+                    "name": "SSH",
+                    "properties": {
+                        "priority": 320,
+                        "protocol": "TCP",
+                        "access": "Allow",
+                        "direction": "Inbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "22"
+                    }
+                }
+            ]
+        },
+        "subnetName": {
+            "value": "default"
+        },
+        "virtualNetworkName": {
+            "value": "chef-vnet"
+        },
+        "addressPrefixes": {
+            "value": [
+                "10.1.0.0/24"
+            ]
+        },
+        "subnets": {
+            "value": [
+                {
+                    "name": "default",
+                    "properties": {
+                        "addressPrefix": "10.1.0.0/24"
+                    }
+                }
+            ]
+        },
+        "publicIpAddressName": {
+            "value": "chefBackend-ip"
+        },
+        "publicIpAddressType": {
+            "value": "Static"
+        },
+        "dnsLabelPrefix": {
+            "value": null
+        },
+        "publicIpAddressSku": {
+            "value": "Standard"
+        },
+        "virtualMachineName": {
+            "value": "chefBackend"
+        },
+        "osDiskType": {
+            "value": "Premium_LRS"
+        },
+        "dataDisks": {
+            "value": [
+                {
+                    "lun": 0,
+                    "createOption": "attach",
+                    "caching": "None",
+                    "writeAcceleratorEnabled": false,
+                    "id": null,
+                    "name": "chefBackend_DataDisk_0",
+                    "storageAccountType": null,
+                    "diskSizeGB": null
+                },
+                {
+                  "lun": 0,
+                  "createOption": "attach",
+                  "caching": "None",
+                  "writeAcceleratorEnabled": false,
+                  "id": null,
+                  "name": "chefBackend_DataDisk_1",
+                  "storageAccountType": null,
+                  "diskSizeGB": null
+              },
+              {
+                "lun": 0,
+                "createOption": "attach",
+                "caching": "None",
+                "writeAcceleratorEnabled": false,
+                "id": null,
+                "name": "chefBackend_DataDisk_2",
+                "storageAccountType": null,
+                "diskSizeGB": null
+              }
+            ]
+        },
+        "dataDiskResources": {
+            "value": [
+                {
+                    "name": "chefBackend_DataDisk_0",
+                    "sku": "Premium_LRS",
+                    "properties": {
+                        "diskSizeGB": 256,
+                        "creationData": {
+                            "createOption": "empty"
+                        }
+                    }
+                },
+                {
+                  "name": "chefBackend_DataDisk_1",
+                  "sku": "Premium_LRS",
+                  "properties": {
+                      "diskSizeGB": 256,
+                      "creationData": {
+                          "createOption": "empty"
+                      }
+                  }
+                },
+                {
+                  "name": "chefBackend_DataDisk_2",
+                  "sku": "Premium_LRS",
+                  "properties": {
+                      "diskSizeGB": 256,
+                      "creationData": {
+                          "createOption": "empty"
+                      }
+                  }
+                }
+            ]
+        },
+        "virtualMachineSize": {
+            "value": "Standard_D8s_v3"
+        },
+        "adminUsername": {
+            "value": "chef"
+        },
+        "adminPublicKey": {
+          "value": null
+        },
+        "backendCount": {
+          "value": 3
+        }
+    }
+}
