@@ -93,13 +93,15 @@ insecure_addon_compat false
 if [ "${HOSTNAME: -1}" = "0" ]; then
   echo "First frontend"
   chef-server-ctl reconfigure --chef-license=accept
+  # cat /etc/opscode/private-chef-secrets.json
+  # cat /var/opt/opscode/upgrades/migration-level
 else
   echo "Other frontends"
-  sleep 120
-  # cp private-chef-secrets.json /etc/opscode/private-chef-secrets.json
-  mkdir -p /var/opt/opscode/upgrades
-  # cp migration-level /var/opt/opscode/upgrades/migration-level
-  touch /var/opt/opscode/bootstrapped
+  # sleep 120
+  # echo '' >> /etc/opscode/private-chef-secrets.json
+  # mkdir -p /var/opt/opscode/upgrades
+  # echo '' >> /var/opt/opscode/upgrades/migration-level
+  # touch /var/opt/opscode/bootstrapped
   # chef-server-ctl reconfigure --chef-license=accept
 fi
 
