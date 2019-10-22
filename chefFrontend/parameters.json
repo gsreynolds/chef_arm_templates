@@ -1,0 +1,147 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "uksouth"
+        },
+        "networkInterfaceName": {
+            "value": "chefFrontend"
+        },
+        "enableAcceleratedNetworking": {
+            "value": true
+        },
+        "networkSecurityGroupName": {
+            "value": "chefFrontend-nsg"
+        },
+        "networkSecurityGroupRules": {
+            "value": [
+                {
+                    "name": "HTTPS",
+                    "properties": {
+                        "priority": 300,
+                        "protocol": "TCP",
+                        "access": "Allow",
+                        "direction": "Inbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "443"
+                    }
+                },
+                {
+                    "name": "SSH",
+                    "properties": {
+                        "priority": 320,
+                        "protocol": "TCP",
+                        "access": "Allow",
+                        "direction": "Inbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "22"
+                    }
+                }
+            ]
+        },
+        "subnetName": {
+            "value": "default"
+        },
+        "virtualNetworkName": {
+            "value": "chef-vnet"
+        },
+        "addressPrefixes": {
+            "value": [
+                "10.1.0.0/24"
+            ]
+        },
+        "subnets": {
+            "value": [
+                {
+                    "name": "default",
+                    "properties": {
+                        "addressPrefix": "10.1.0.0/24"
+                    }
+                }
+            ]
+        },
+        "publicIpAddressName": {
+            "value": "chefFrontend-ip"
+        },
+        "publicIpAddressType": {
+            "value": "Static"
+        },
+        "dnsLabelPrefix": {
+            "value": null
+        },
+        "publicIpAddressSku": {
+            "value": "Standard"
+        },
+        "virtualMachineName": {
+            "value": "chefFrontend"
+        },
+        "osDiskType": {
+            "value": "Premium_LRS"
+        },
+        "dataDisks": {
+            "value": [
+                {
+                    "lun": 0,
+                    "createOption": "attach",
+                    "caching": "None",
+                    "writeAcceleratorEnabled": false,
+                    "id": null,
+                    "name": "chefFrontend_DataDisk_0",
+                    "storageAccountType": null,
+                    "diskSizeGB": null
+                },
+                {
+                  "lun": 0,
+                  "createOption": "attach",
+                  "caching": "None",
+                  "writeAcceleratorEnabled": false,
+                  "id": null,
+                  "name": "chefFrontend_DataDisk_1",
+                  "storageAccountType": null,
+                  "diskSizeGB": null
+              }
+            ]
+        },
+        "dataDiskResources": {
+            "value": [
+                {
+                    "name": "chefFrontend_DataDisk_0",
+                    "sku": "Premium_LRS",
+                    "properties": {
+                        "diskSizeGB": 128,
+                        "creationData": {
+                            "createOption": "empty"
+                        }
+                    }
+                },
+                {
+                  "name": "chefFrontend_DataDisk_1",
+                  "sku": "Premium_LRS",
+                  "properties": {
+                      "diskSizeGB": 128,
+                      "creationData": {
+                          "createOption": "empty"
+                      }
+                  }
+                }
+            ]
+        },
+        "virtualMachineSize": {
+            "value": "Standard_D8s_v3"
+        },
+        "adminUsername": {
+            "value": "chef"
+        },
+        "adminPublicKey": {
+          "value": null
+        },
+        "frontendCount": {
+          "value": 2
+        }
+    }
+}
