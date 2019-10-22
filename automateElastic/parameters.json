@@ -56,13 +56,13 @@
             "value": "automateElastic-ip"
         },
         "publicIpAddressType": {
-            "value": "Dynamic"
+            "value": "Static"
         },
         "dnsLabelPrefix": {
             "value": null
         },
         "publicIpAddressSku": {
-            "value": "Basic"
+            "value": "Standard"
         },
         "virtualMachineName": {
             "value": "automateElastic"
