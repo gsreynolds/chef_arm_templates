@@ -55,3 +55,6 @@ else
   sleep 120
   chef-backend-ctl join-cluster chefBackend0 --accept-license -s /etc/chef-backend/chef-backend-secrets.json -y
 fi
+
+# chef-backend-ctl status
+# chef-backend-ctl cluster-status

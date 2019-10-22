@@ -81,6 +81,13 @@ dark_launch['actions'] = false
 # Cookbook Caching
 opscode_erchef['nginx_bookshelf_caching'] = :on
 opscode_erchef['s3_url_expiry_window_size'] = '50%'
+
+# Data collector & compliance
+data_collector['root_url'] =  'https://automate/data-collector/v0/'
+data_collector['proxy'] = true
+profiles['root_url'] = 'https://automate'
+opscode_erchef['max_request_size'] = 2000000
+insecure_addon_compat false
 " >> /etc/opscode/chef-server.rb
 
 if [ "${HOSTNAME: -1}" = "0" ]; then
