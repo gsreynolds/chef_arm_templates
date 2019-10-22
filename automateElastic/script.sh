@@ -46,7 +46,7 @@ gpgcheck=1
 repo_gpgcheck=1
 autorefresh=1
 type=rpm-md' > /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
-yum updateinfo
+yum updateinfo -y
 yum install -y java-11-openjdk-devel
 yum install -y opendistroforelasticsearch-0.7.0-1
 
