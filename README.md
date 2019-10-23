@@ -27,7 +27,7 @@ chefFrontEnd: 10.1.0.20, 10.1.0.21
 
 ## Manual steps
 
-* Retrive Chef Automate credentials from `/var/lib/waagent/custom-script/download/0/automate-credentials.toml`
+* Retrieve Chef Automate credentials from `/var/lib/waagent/custom-script/download/0/automate-credentials.toml`
 * After creating Chef Server Frontends, copy `/etc/opscode/private-chef-secrets.json` and `/var/opt/opscode/upgrades/migration-level` from `chefFrontEnd0` to `chefFrontend1`. Create empty file `/var/opt/opscode/bootstrapped` on `chefFrontEnd1`. Run `chef-server-ctl reconfigure --chef-license=accept`.
 * Create data collector token on Chef Automate e.g. `chef-automate admin-token`
 * Set data collector token on both Chef Server Frontends. `chef-server-ctl set-secret data_collector token TOKEN && chef-server-ctl restart nginx && chef-server-ctl restart opscode-erchef`.

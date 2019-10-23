@@ -234,7 +234,7 @@
                         ]
                     },
                     "commandToExecute": {
-                        "value": "[concat('sh script.sh', ' \"', parameters('automateFQDN'), '\" \"', parameters('automateLicense'), '\"')]"
+                        "value": "[concat('bash script.sh', ' \"', parameters('automateFQDN'), '\" \"', parameters('automateLicense'), '\"')]"
                     }
                 }
             },

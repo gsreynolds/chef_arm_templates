@@ -254,7 +254,7 @@
                         ]
                     },
                     "commandToExecute": {
-                        "value": "[concat('sh script.sh')]"
+                        "value": "[concat('bash script.sh')]"
                     }
                 }
             },

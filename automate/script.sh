@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -o errexit
 set -o pipefail
@@ -36,6 +36,7 @@ echo vm.dirty_expire_centisecs=20000 | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p /etc/sysctl.conf
 sudo ./chef-automate init-config --fqdn "$FQDN"
 
+# shellcheck disable=SC2028
 echo '
 [global.v1.external.elasticsearch]
   enable = true
