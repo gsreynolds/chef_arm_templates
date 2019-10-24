@@ -2,6 +2,7 @@
 
 Templates to create:
 * virtual network
+* storage account with blob container for initial sharing of secrets between servers
 * 3 node ElasticSearch cluster for Chef Automate
 * Chef Automate server
 * 3 node Chef Backend HA cluster
@@ -16,6 +17,7 @@ Templates to create:
 
 ```
 az group deployment create --name vnet --resource-group RGNAMEHERE --template-file vnet/template.json --parameters @vnet/parameters.json
+az group deployment create --name storageAccount --resource-group RGNAMEHERE --template-file storageAccount/template.json --parameters @storageAccount/parameters.json
 az group deployment create --name automateElastic --resource-group RGNAMEHERE --template-file automateElastic/template.json --parameters @automateElastic/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
 az group deployment create --name automate --resource-group RGNAMEHERE --template-file automate/template.json --parameters @automate/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
 az group deployment create --name chefLB --resource-group RGNAMEHERE --template-file chefLB/template.json --parameters=@chefLB/parameters.json
