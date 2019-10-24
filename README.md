@@ -9,7 +9,7 @@ Templates to create:
 * 2 Chef Infra Server frontends
 * load balancer for Chef Infra Server frontends
 
-![Overview](/images/overview.svg)
+![Overview](images/overview.svg)
 
 ## Before using
 
