@@ -6,6 +6,9 @@ set -o nounset
 
 FQDN="${1:-}"
 LICENSE="${2:-}"
+SECRETSLOCATION="${3:-}"
+SECRETSTOKEN="${4:-}"
+
 DISK="sdc"
 VG="automate"
 LV="data"
@@ -58,3 +61,7 @@ echo '
 
 sudo ./chef-automate deploy --channel current --upgrade-strategy none --accept-terms-and-mlsa config.toml
 sudo chef-automate license apply "$LICENSE"
+
+chef-automate admin-token >> data-collector-token
+curl --retry 3 --silent --show-error --upload-file automate-credentials.toml "$SECRETSLOCATION/automate-credentials.toml$SECRETSTOKEN" --header "x-ms-blob-type: BlockBlob"
+curl --retry 3 --silent --show-error --upload-file data-collector-token "$SECRETSLOCATION/data-collector-token$SECRETSTOKEN" --header "x-ms-blob-type: BlockBlob"

@@ -59,5 +59,6 @@ else
 fi
 
 # Configure data collector
-# chef-server-ctl set-secret data_collector token TOKEN
-# chef-server-ctl restart nginx && chef-server-ctl restart opscode-erchef
+curl --retry 3 --silent --show-error -o data-collector-token "$SECRETSLOCATION/data-collector-token$SECRETSTOKEN"
+chef-server-ctl set-secret data_collector token $(cat data-collector-token)
+chef-server-ctl restart nginx && chef-server-ctl restart opscode-erchef

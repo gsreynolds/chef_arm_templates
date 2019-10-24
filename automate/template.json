@@ -16,6 +16,18 @@
           },
           "defaultValue": ""
         },
+        "_secretsLocation": {
+          "type": "string",
+          "metadata": {
+            "description": "URL of the Standard storage account blob container to receive shared secrets and config files. (ie. https://mystandardstorage.blob.core.windows.net/artifactsfolder )"
+          }
+        },
+        "_secretsLocationSasToken": {
+          "type": "securestring",
+          "metadata": {
+            "description": "Generated Shared Acccess Signature token to access _secretsLocation"
+          }
+        },
         "location": {
             "type": "string"
         },
@@ -248,7 +260,7 @@
                         ]
                     },
                     "commandToExecute": {
-                        "value": "[concat('bash script.sh', ' \"', parameters('automateFQDN'), '\" \"', parameters('automateLicense'), '\"')]"
+                        "value": "[concat('bash script.sh', ' \"', parameters('automateFQDN'), '\" \"', parameters('automateLicense'), '\"', ' \"', parameters('_secretsLocation'), '\" \"', parameters('_secretsLocationSasToken'), '\"')]"
                     }
                 }
             },
