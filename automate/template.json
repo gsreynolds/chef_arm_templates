@@ -2,6 +2,20 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "_artifactsLocation": {
+          "type": "string",
+          "metadata": {
+            "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
+          },
+          "defaultValue": "https://raw.githubusercontent.com/gsreynolds/chef_arm_templates/master/"
+        },
+        "_artifactsLocationSasToken": {
+          "type": "securestring",
+          "metadata": {
+            "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+          },
+          "defaultValue": ""
+        },
         "location": {
             "type": "string"
         },
@@ -230,7 +244,7 @@
                     },
                     "fileUris": {
                         "value": [
-                          "https://raw.githubusercontent.com/gsreynolds/chef_arm_templates/master/automate/script.sh"
+                          "[concat(parameters('_artifactsLocation'), 'automate/script.sh', parameters('_artifactsLocationSasToken'))]"
                         ]
                     },
                     "commandToExecute": {
