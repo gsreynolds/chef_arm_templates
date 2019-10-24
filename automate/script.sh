@@ -58,5 +58,3 @@ echo '
 
 sudo ./chef-automate deploy --channel current --upgrade-strategy none --accept-terms-and-mlsa config.toml
 sudo chef-automate license apply "$LICENSE"
-
-# chef-automate diagnostics run ~iam-v2 ~cfgmgmt-liveness ~compliance-scanning
