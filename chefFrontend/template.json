@@ -65,6 +65,15 @@
         "frontendCount": {
             "type": "int"
         },
+        "availabilitySetName": {
+            "type": "string"
+        },
+        "platformFaultDomainCount": {
+            "type": "int"
+        },
+        "platformUpdateDomainCount": {
+            "type": "int"
+        },
         "lbName": {
             "type": "string"
         },
@@ -78,6 +87,20 @@
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]"
     },
     "resources": [
+        {
+            "type": "Microsoft.Compute/availabilitySets",
+            "name": "[parameters('availabilitySetName')]",
+            "apiVersion": "2019-03-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "platformFaultDomainCount": "[parameters('platformFaultDomainCount')]",
+                "platformUpdateDomainCount": "[parameters('platformUpdateDomainCount')]"
+            },
+            "sku": {
+                "name": "Aligned"
+            },
+            "tags": {}
+        },
         {
             "name": "[concat(parameters('networkInterfaceName'), copyIndex())]",
             "type": "Microsoft.Network/networkInterfaces",
@@ -225,6 +248,9 @@
                             ]
                         }
                     }
+                },
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('availabilitySetName'))]"
                 }
             },
             "copy": {

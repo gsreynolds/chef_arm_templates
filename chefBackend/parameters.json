@@ -149,6 +149,15 @@
         },
         "backendCount": {
           "value": 3
+        },
+        "availabilitySetName": {
+          "value": "chefBackendAvail"
+        },
+        "platformFaultDomainCount": {
+            "value": 2
+        },
+        "platformUpdateDomainCount": {
+            "value": 3
         }
     }
 }

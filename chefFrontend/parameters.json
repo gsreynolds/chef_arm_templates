@@ -148,6 +148,15 @@
         },
         "lbPoolName": {
           "value": "chef-ha-frontends"
+        },
+        "availabilitySetName": {
+          "value": "chefFrontendAvail"
+        },
+        "platformFaultDomainCount": {
+            "value": 2
+        },
+        "platformUpdateDomainCount": {
+            "value": 3
         }
     }
 }

@@ -50,13 +50,7 @@ yum updateinfo -y
 yum install -y java-11-openjdk-devel
 yum install -y opendistroforelasticsearch-0.7.0-1
 
-# Test ElasticSearch
-# curl -XGET https://localhost:9200 -u admin:admin --insecure
-# curl -XGET https://localhost:9200/_cat/nodes?v -u admin:admin --insecure
-# curl -XGET https://localhost:9200/_cat/plugins?v -u admin:admin --insecure
-# curl -XGET https://localhost:9200/_cluster/health?pretty -u admin:admin --insecure
-# curl -XGET "https://localhost:9200/_cat/indices?v&pretty" -u admin:admin --insecure
-
+# Configure ElasticSearch
 echo "
 node.name: $HOSTNAME
 " >> /etc/elasticsearch/elasticsearch.yml
