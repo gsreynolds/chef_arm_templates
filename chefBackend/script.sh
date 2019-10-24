@@ -4,6 +4,9 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
+SECRETSLOCATION="${1:-}"
+SECRETSTOKEN="${2:-}"
+
 DISK="sdc"
 VG="chefbackend"
 LV="data"
@@ -34,28 +37,20 @@ mount -a
 curl -L https://omnitruck.chef.io/install.sh | bash -s -- -P chef-backend -d /tmp -v 2.0.30
 mkdir -p /etc/chef-backend
 echo "publish_address '$(hostname -i)'" >> /etc/chef-backend/chef-backend.rb
-echo '{
-  "postgresql": {
-    "db_superuser_password": "111d8798051edbf25e60a1932c4aed8b55b1e4c9096a0fdbea0990bf9d972e7bda83867c33c24f6f2a28d30f755dcadff5cd",
-    "replication_password": "30408d653dfcd05ae1b6128a529b14b9e35a5ffc9d5db60fb59b2de18bef5e5798a388e383e6a7661db2934fdd8a93d2b6df"
-  },
-  "etcd": {
-    "initial_cluster_token": "84bf482510ff4a431319a9310706ab601ed605b03c64fe28489c6445aab329c7cee3595d477ab8575d62457bbaef1c2ed1dd"
-  },
-  "elasticsearch": {
-    "cluster_name": "ChefBackend-422d20f3"
-  }
-}' >> /etc/chef-backend/chef-backend-secrets.json
 
 if [ "${HOSTNAME: -1}" = "0" ]; then
   echo "Initial leader"
   chef-backend-ctl create-cluster --accept-license -y
+  curl --retry 3 --silent --show-error --upload-file /etc/chef-backend/chef-backend-secrets.json "$SECRETSLOCATION/chef-backend-secrets.json$SECRETSTOKEN" --header "x-ms-blob-type: BlockBlob"
+  for i in {0..2}
+  do
+    chef-backend-ctl gen-server-config chefFrontend$i -f chef-server.rb.chefFrontend$i
+    curl --retry 3 --silent --show-error --upload-file chef-server.rb.chefFrontend$i "$SECRETSLOCATION/chef-server.rb.chefFrontend$i$SECRETSTOKEN" --header "x-ms-blob-type: BlockBlob"
+  done
 else
   echo "Initial follower"
   # backend1 waits 120 seconds, backend2 waits 240 seconds
   sleep "$((120 * ${HOSTNAME: -1}))"
-  chef-backend-ctl join-cluster chefBackend0 --accept-license -s /etc/chef-backend/chef-backend-secrets.json -y
+  curl --retry 3 --silent --show-error -o chef-backend-secrets.json "$SECRETSLOCATION/chef-backend-secrets.json$SECRETSTOKEN"
+  chef-backend-ctl join-cluster chefBackend0 --accept-license -s chef-backend-secrets.json -y
 fi
-
-# chef-backend-ctl status
-# chef-backend-ctl cluster-status
