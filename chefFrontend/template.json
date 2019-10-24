@@ -145,7 +145,7 @@
                                 "id": "[variables('subnetRef')]"
                             },
                             "privateIPAllocationMethod": "Static",
-                            "privateIpAddress": "[concat('10.1.0.', copyIndex(20))]",
+                            "privateIpAddress": "[concat('10.1.0.', copyIndex(40))]",
                             "publicIpAddress": {
                                 "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', concat(parameters('publicIpAddressName'), copyIndex()))]"
                             },

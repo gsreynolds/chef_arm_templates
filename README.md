@@ -27,10 +27,10 @@ az group deployment create --name chefFrontend --resource-group RGNAMEHERE --tem
 
 ```
 VNET: 10.1.0.0/24
-automateElastic: 10.1.0.4, 10.1.0.5, 10.1.0.6
-automate: 10.1.0.7
-chefBackend: 10.1.0.10, 10.1.0.11, 10.1.0.12
-chefFrontEnd: 10.1.0.20, 10.1.0.21
+automateElastic: 10.1.0.10, 10.1.0.11, 10.1.0.12
+automate: 10.1.0.20
+chefBackend: 10.1.0.30, 10.1.0.31, 10.1.0.32
+chefFrontEnd: 10.1.0.40, 10.1.0.41
 ```
 
 ## Manual steps
