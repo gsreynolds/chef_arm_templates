@@ -15,6 +15,8 @@ Templates to create:
 
 * Add elastic search root CA and use securityadmin.sh to replace demo certificates (https://opendistro.github.io/for-elasticsearch-docs/docs/security-configuration/)
 
+## Usage
+
 ```
 az group deployment create --name vnet --resource-group RGNAMEHERE --template-file vnet/template.json --parameters @vnet/parameters.json
 az group deployment create --name storageAccount --resource-group RGNAMEHERE --template-file storageAccount/template.json --parameters @storageAccount/parameters.json
@@ -25,6 +27,8 @@ az group deployment create --name chefBackend --resource-group RGNAMEHERE --temp
 az group deployment create --name chefFrontend --resource-group RGNAMEHERE --template-file chefFrontend/template.json --parameters @chefFrontend/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
 ```
 
+### Network
+
 ```
 VNET: 10.1.0.0/24
 automateElastic: 10.1.0.10, 10.1.0.11, 10.1.0.12
@@ -33,11 +37,25 @@ chefBackend: 10.1.0.30, 10.1.0.31, 10.1.0.32
 chefFrontEnd: 10.1.0.40, 10.1.0.41
 ```
 
-## Manual steps
+### Manual steps
 
-* Create users and orgs on a Chef Server Frontend:
+After deploying the templates, some manual steps are required.
+* Retrieve credentials for Automate from the blob container and login
+* Create users and orgs on a Chef Server Frontend e.g.
 ```
 chef-server-ctl org-create test TestOrg -f test-validator.pem
 chef-server-ctl user-create admin Admin User admin@example.com TestPassword -o test -f admin.pem
 chef-server-ctl grant-server-admin-permissions admin
+```
+
+## Testing
+
+InSpec profiles and runner scripts exist in the `test/` directory.
+
+```
+cd test
+./automateElastic.sh ESDNSPREFIXHERE
+./automate.sh AUTDNSPREFIXHERE
+./chefBackend.sh BEDNSPREFIXHERE
+./chefFrontend.sh FEDNSPREFIXHERE
 ```
