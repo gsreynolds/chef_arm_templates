@@ -49,12 +49,6 @@
         "virtualNetworkName": {
             "type": "string"
         },
-        "addressPrefixes": {
-            "type": "array"
-        },
-        "subnets": {
-            "type": "array"
-        },
         "publicIpAddressName": {
             "type": "string"
         },

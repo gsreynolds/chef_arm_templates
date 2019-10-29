@@ -37,21 +37,6 @@
         "virtualNetworkName": {
             "value": "chef-vnet"
         },
-        "addressPrefixes": {
-            "value": [
-                "10.1.0.0/24"
-            ]
-        },
-        "subnets": {
-            "value": [
-                {
-                    "name": "default",
-                    "properties": {
-                        "addressPrefix": "10.1.0.0/24"
-                    }
-                }
-            ]
-        },
         "publicIpAddressName": {
             "value": "chefBackend-ip"
         },
