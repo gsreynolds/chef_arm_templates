@@ -5,6 +5,6 @@ set -o pipefail
 set -o nounset
 
 DNSPREFIX="${1:-}"
-DOMAIN="${2:-uksouth.cloudapp.azure.com}"
+DOMAIN="${2:-northeurope.cloudapp.azure.com}"
 
 inspec exec -t ssh://chef@$DNSPREFIX.$DOMAIN automate/

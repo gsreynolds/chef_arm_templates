@@ -281,7 +281,7 @@
                         "value": "[concat('chefBackend', copyIndex())]"
                     },
                     "location": {
-                        "value": "uksouth"
+                        "value": "northeurope"
                     },
                     "fileUris": {
                         "value": [

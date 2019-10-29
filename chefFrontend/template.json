@@ -292,7 +292,7 @@
                         "value": "[concat('chefFrontend', copyIndex())]"
                     },
                     "location": {
-                        "value": "uksouth"
+                        "value": "northeurope"
                     },
                     "fileUris": {
                         "value": [

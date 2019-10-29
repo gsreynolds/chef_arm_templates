@@ -269,7 +269,7 @@
                         "value": "[concat('automateElastic', copyIndex())]"
                     },
                     "location": {
-                        "value": "uksouth"
+                        "value": "northeurope"
                     },
                     "fileUris": {
                         "value": [

@@ -6,7 +6,7 @@
             "value": "chef-vnet"
         },
         "location": {
-            "value": "uksouth"
+            "value": "northeurope"
         },
         "addressPrefix": {
             "value": "10.1.0.0/24"
