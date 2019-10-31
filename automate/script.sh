@@ -40,14 +40,13 @@ sudo sysctl -p /etc/sysctl.conf
 
 # Install Automate
 if [ "${AIRGAP}" = "yes" ]; then
-  mkdir airgap
-  curl --retry 3 --silent --show-error -o airgap/chef-automate_linux_amd64.zip "$ARTIFACTSLOCATION/automate/chef-automate_linux_amd64.zip$ARTIFACTSTOKEN"
-  curl --retry 3 --silent --show-error -o airgap/automate.aib "$ARTIFACTSLOCATION/automate/automate.aib$ARTIFACTSTOKEN"
-  sudo unzip airgap/chef-automate_linux_amd64.zip
+  curl --retry 3 --silent --show-error -o chef-automate_linux_amd64.zip "$ARTIFACTSLOCATION/automate/chef-automate_linux_amd64.zip$ARTIFACTSTOKEN"
+  curl --retry 3 --silent --show-error -o automate.aib "$ARTIFACTSLOCATION/automate/automate.aib$ARTIFACTSTOKEN"
+  sudo unzip chef-automate_linux_amd64.zip
   sudo ./chef-automate init-config --upgrade-strategy none --fqdn "$FQDN"
 else
   wget https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip
-  sudo unzip airgap/chef-automate_linux_amd64.zip
+  sudo unzip chef-automate_linux_amd64.zip
   sudo ./chef-automate init-config --fqdn "$FQDN"
 fi
 
@@ -72,7 +71,7 @@ echo '
 # ' >> config.toml
 
 if [ "${AIRGAP}" = "yes" ]; then
-  sudo ./chef-automate deploy --channel current --accept-terms-and-mlsa config.toml --airgap-bundle airgap/automate.aib
+  sudo ./chef-automate deploy --channel current --accept-terms-and-mlsa config.toml ---bundle automate.aib
 else
   sudo ./chef-automate deploy --channel current --accept-terms-and-mlsa config.toml
 fi

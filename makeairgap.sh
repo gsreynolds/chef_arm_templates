@@ -45,7 +45,7 @@ wget https://packages.chef.io/files/stable/chef-server/13.0.17/el/7/chef-server-
 echo "Upload the .airgaptmp directory to your _artifactsLocation ${ARTIFACTSLOCATION}"
 
 # FIXME: Azure File RequestBodyTooLarge for the airgap bundle, chef-backend and chef-server-core.rpm
-# Use https://github.com/Azure/blobxfer, Azure Storage Explorer app or other method to upload the automate.aib
+# Use https://github.com/Azure/blobxfer, Azure Storage Explorer app or other methods
 
 # echo "Upload all artifacts for automateElastic"
 # find .airgaptmp/automateElastic -name '*' -type f -execdir curl --retry 3 --upload-file {} ${ARTIFACTSLOCATION}/automateElastic/{}${ARTIFACTSTOKEN} --header "x-ms-blob-type: BlockBlob" \;

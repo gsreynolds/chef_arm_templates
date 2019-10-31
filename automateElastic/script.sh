@@ -36,14 +36,13 @@ yum install -y java-11-openjdk-devel
 
 # Install Open Distro for ElasticSearch
 if [ "${AIRGAP}" = "yes" ]; then
-  mkdir airgap
-  curl --retry 3 --silent --show-error -o airgap/elasticsearch-oss-6.5.4.rpm "$ARTIFACTSLOCATION/automateElastic/elasticsearch-oss-6.5.4.rpm$ARTIFACTSTOKEN"
-  curl --retry 3 --silent --show-error -o airgap/opendistro-alerting-0.7.0.0.rpm "$ARTIFACTSLOCATION/automateElastic/opendistro-alerting-0.7.0.0.rpm$ARTIFACTSTOKEN"
-  curl --retry 3 --silent --show-error -o airgap/opendistro-security-0.7.0.1.rpm "$ARTIFACTSLOCATION/automateElastic/opendistro-security-0.7.0.1.rpm$ARTIFACTSTOKEN"
-  curl --retry 3 --silent --show-error -o airgap/opendistro-sql-0.7.0.0.rpm "$ARTIFACTSLOCATION/automateElastic/opendistro-sql-0.7.0.0.rpm$ARTIFACTSTOKEN"
-  curl --retry 3 --silent --show-error -o airgap/opendistro-performance-analyzer-0.7.0.0.rpm "$ARTIFACTSLOCATION/automateElastic/opendistro-performance-analyzer-0.7.0.0.rpm$ARTIFACTSTOKEN"
-  curl --retry 3 --silent --show-error -o airgap/opendistroforelasticsearch-0.7.0.rpm "$ARTIFACTSLOCATION/automateElastic/opendistroforelasticsearch-0.7.0.rpm$ARTIFACTSTOKEN"
-  rpm -ivh airgap/*.rpm
+  curl --retry 3 --silent --show-error -o elasticsearch-oss-6.5.4.rpm "$ARTIFACTSLOCATION/automateElastic/elasticsearch-oss-6.5.4.rpm$ARTIFACTSTOKEN"
+  curl --retry 3 --silent --show-error -o opendistro-alerting-0.7.0.0.rpm "$ARTIFACTSLOCATION/automateElastic/opendistro-alerting-0.7.0.0.rpm$ARTIFACTSTOKEN"
+  curl --retry 3 --silent --show-error -o opendistro-security-0.7.0.1.rpm "$ARTIFACTSLOCATION/automateElastic/opendistro-security-0.7.0.1.rpm$ARTIFACTSTOKEN"
+  curl --retry 3 --silent --show-error -o opendistro-sql-0.7.0.0.rpm "$ARTIFACTSLOCATION/automateElastic/opendistro-sql-0.7.0.0.rpm$ARTIFACTSTOKEN"
+  curl --retry 3 --silent --show-error -o opendistro-performance-analyzer-0.7.0.0.rpm "$ARTIFACTSLOCATION/automateElastic/opendistro-performance-analyzer-0.7.0.0.rpm$ARTIFACTSTOKEN"
+  curl --retry 3 --silent --show-error -o opendistroforelasticsearch-0.7.0.rpm "$ARTIFACTSLOCATION/automateElastic/opendistroforelasticsearch-0.7.0.rpm$ARTIFACTSTOKEN"
+  rpm -ivh *.rpm
 else
   echo '[elasticsearch-6.x]
   name=Elasticsearch repository for 6.x packages
