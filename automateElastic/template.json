@@ -81,6 +81,10 @@
         },
         "platformUpdateDomainCount": {
             "type": "int"
+        },
+        "enableAirgap": {
+            "type": "string",
+            "defaultValue": "no"
         }
     },
     "variables": {
@@ -273,11 +277,11 @@
                     },
                     "fileUris": {
                         "value": [
-                          "[concat(parameters('_artifactsLocation'), 'automateElastic/script.sh', parameters('_artifactsLocationSasToken'))]"
+                          "[concat(parameters('_artifactsLocation'), '/automateElastic/script.sh', parameters('_artifactsLocationSasToken'))]"
                         ]
                     },
                     "commandToExecute": {
-                        "value": "[concat('bash script.sh')]"
+                        "value": "[concat('bash script.sh', ' \"', parameters('enableAirgap'), '\" \"', parameters('_artifactsLocation'), '\" \"', parameters('_artifactsLocationSasToken'), '\"')]"
                     }
                 }
             },
