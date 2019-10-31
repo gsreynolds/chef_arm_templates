@@ -13,7 +13,9 @@ Templates to create:
 
 ## Before using
 
-* Add elastic search root CA and use securityadmin.sh to replace demo certificates (https://opendistro.github.io/for-elasticsearch-docs/docs/security-configuration/)
+* Familarise with Open Distro for Elasticsearch configuration, particularly security administration (https://opendistro.github.io/for-elasticsearch-docs/docs/security-configuration/)
+* Consider removing the public IP addressing
+* Consider restricting the network security groups
 
 ## Usage
 
@@ -26,6 +28,13 @@ az group deployment create --name chefLB --resource-group RGNAMEHERE --template-
 az group deployment create --name chefBackend --resource-group RGNAMEHERE --template-file chefBackend/template.json --parameters @chefBackend/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
 az group deployment create --name chefFrontend --resource-group RGNAMEHERE --template-file chefFrontend/template.json --parameters @chefFrontend/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
 ```
+
+### Airgap
+By default the templates and configuration scripts assume internet access.
+
+A `makeairgap.sh` script is provided to download on an internet facing Linux system all of the required artifacts to the `.airgaptmp` directory, which can then be staged on the `_artifactsLocation` blob container. It takes two arguments, the artifact location and artifact token which can be retrived from the outputs of the storageAccount template. e.g. `./makeairgap.sh "LOCATION" "TOKEN". At this time, this downloads the artifacts but only uploads the scripts. Large artifacts such as the RPMs and the airgap bundle for Automate must be uploaded to the artifacts blob container by other means e.g. https://github.com/Azure/blobxfer, Azure Storage Explorer app or other method.
+
+The custom script extension `script.sh` for the Elasticsearch cluster, Automate, Chef Backend cluster and Chef Frontends take an airgap argument which will retrive the required artifacts from the specified `_artifactsLocation` blob container. To enable this behaviour, there is an `enableAirgap` parameter in the matching ARM templates.
 
 ### Network
 
@@ -50,7 +59,7 @@ chef-server-ctl grant-server-admin-permissions admin
 
 ## Testing
 
-InSpec profiles and runner scripts exist in the `test/` directory.
+InSpec profiles and runner scripts exist in the `test/` directory. (The runner scripts assume FQDNs `.northeurope.cloudapp.azure.com`)
 
 ```
 cd test

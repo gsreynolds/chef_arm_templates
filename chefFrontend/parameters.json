@@ -56,9 +56,6 @@
         "publicIpAddressType": {
             "value": "Static"
         },
-        "dnsLabelPrefix": {
-            "value": null
-        },
         "publicIpAddressSku": {
             "value": "Standard"
         },
@@ -122,9 +119,6 @@
         "adminUsername": {
             "value": "chef"
         },
-        "adminPublicKey": {
-          "value": null
-        },
         "frontendCount": {
           "value": 2
         },
@@ -142,6 +136,9 @@
         },
         "platformUpdateDomainCount": {
             "value": 3
+        },
+        "enableAirgap": {
+          "value": "no"
         }
     }
 }

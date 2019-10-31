@@ -38,7 +38,18 @@
                         "name": "[parameters('subnetName')]",
                         "properties": {
                             "addressPrefix": "[parameters('subnetAddressPrefix')]",
-                            "addressPrefixes": []
+                            "addressPrefixes": [],
+                            "serviceEndpoints": [
+                                {
+                                    "service": "Microsoft.Storage",
+                                    "locations": [
+                                        "[parameters('location')]"
+                                    ]
+                                }
+                            ],
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
                         }
                     }
                 ],
