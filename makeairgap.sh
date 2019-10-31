@@ -10,10 +10,10 @@ ARTIFACTSTOKEN="${2:-}"
 echo "Upload all scripts"
 find . -name 'script.sh' -type f -exec curl --retry 3 --upload-file {} ${ARTIFACTSLOCATION}/{}${ARTIFACTSTOKEN} --header "x-ms-blob-type: BlockBlob" \;
 
-mkdir .airgaptmp
+mkdir -p .airgaptmp
 
 # Automate Elasticsearch cluster
-mkdir .airgaptmp/automateElastic
+mkdir -p .airgaptmp/automateElastic
 
 echo "Download elasticsearch-oss"
 wget --quiet https://artifacts.elastic.co/packages/oss-6.x/yum/6.5.4/elasticsearch-oss-6.5.4.rpm -P .airgaptmp/automateElastic
@@ -22,22 +22,39 @@ odfe=( "opendistro-alerting-0.7.0.0.rpm" "opendistro-security-0.7.0.1.rpm" "open
 for rpm in "${odfe[@]}"
 do
   echo "Download ${rpm}"
-	wget --quiet https://d3g5vo6xdbdb9a.cloudfront.net/yum/noarch/${rpm} -P .airgaptmp/automateElastic
+	wget --quiet https://d3g5vo6xdbdb9a.cloudfront.net/yum/noarch/${rpm} -O .airgaptmp/automateElastic/${rpm} 
 done
 
 # Automate
-mkdir .airgaptmp/automate
+mkdir -p .airgaptmp/automate
 cd .airgaptmp/automate
-wget https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip
-unzip chef-automate_linux_amd64.zip
-./chef-automate airgap bundle create automate.aib
+wget https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip -O chef-automate_linux_amd64.zip
+unzip -o chef-automate_linux_amd64.zip
+# ./chef-automate airgap bundle create automate.aib
 rm ./chef-automate
 cd -
 
-echo "Upload all artifacts for automateElastic"
-find .airgaptmp/automateElastic -name '*' -type f -execdir curl --retry 3 --upload-file {} ${ARTIFACTSLOCATION}/automateElastic/{}${ARTIFACTSTOKEN} --header "x-ms-blob-type: BlockBlob" \;
+# Chef Backend
+mkdir -p .airgaptmp/chefBackend
+wget https://packages.chef.io/files/stable/chef-backend/2.0.30/el/7/chef-backend-2.0.30-1.el7.x86_64.rpm -O .airgaptmp/chefBackend/chef-backend.rpm
 
-echo "Upload all artifacts for automateElastic"
-# FIXME: Azure File RequestBodyTooLarge for the airgap bundle
-# Use https://github.com/Azure/blobxfer, Azure Storage Explorer or other method to upload the automate.aib
-find .airgaptmp/automate -name '*.zip' -type f -execdir curl --retry 3 --upload-file {} ${ARTIFACTSLOCATION}/automate/{}${ARTIFACTSTOKEN} --header "x-ms-blob-type: BlockBlob" \;
+# Chef Frontend
+mkdir -p .airgaptmp/chefFrontend
+wget https://packages.chef.io/files/stable/chef-server/13.0.17/el/7/chef-server-core-13.0.17-1.el7.x86_64.rpm -O .airgaptmp/chefFrontend/chef-server-core.rpm
+
+echo "Upload the .airgaptmp directory to your _artifactsLocation ${ARTIFACTSLOCATION}"
+
+# FIXME: Azure File RequestBodyTooLarge for the airgap bundle, chef-backend and chef-server-core.rpm
+# Use https://github.com/Azure/blobxfer, Azure Storage Explorer app or other method to upload the automate.aib
+
+# echo "Upload all artifacts for automateElastic"
+# find .airgaptmp/automateElastic -name '*' -type f -execdir curl --retry 3 --upload-file {} ${ARTIFACTSLOCATION}/automateElastic/{}${ARTIFACTSTOKEN} --header "x-ms-blob-type: BlockBlob" \;
+
+# echo "Upload all artifacts for automate"
+# find .airgaptmp/automate -name '*.zip' -type f -execdir curl --retry 3 --upload-file {} ${ARTIFACTSLOCATION}/automate/{}${ARTIFACTSTOKEN} --header "x-ms-blob-type: BlockBlob" \;
+
+# echo "Upload RPM for chefBackend"
+# curl --retry 3 --upload-file .airgaptmp/chefBackend/chef-backend.rpm ${ARTIFACTSLOCATION}/chefBackend/chef-backend.rpm${ARTIFACTSTOKEN} --header "x-ms-blob-type: BlockBlob" \;
+
+# echo "Upload RPM for chefFrontend"
+# curl --retry 3 --upload-file .airgaptmp/chefFrontend/chef-server-core.rpm ${ARTIFACTSLOCATION}/chefFrontend/chef-server-core.rpm${ARTIFACTSTOKEN} --header "x-ms-blob-type: BlockBlob" \;

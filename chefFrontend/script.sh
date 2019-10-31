@@ -4,8 +4,11 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-SECRETSLOCATION="${1:-}"
-SECRETSTOKEN="${2:-}"
+AIRGAP="${1:-no}"
+ARTIFACTSLOCATION="${2:-}"
+ARTIFACTSTOKEN="${3:-}"
+SECRETSLOCATION="${4:-}"
+SECRETSTOKEN="${5:-}"
 
 DISK="sdc"
 VG="opscode"
@@ -29,7 +32,13 @@ mkfs.xfs /dev/$VG/$LV
 echo "/dev/mapper/$VG-$LV $MOUNT xfs defaults 0 0" | sudo tee -a /etc/fstab
 mount -a
 
-curl -L https://omnitruck.chef.io/install.sh | bash -s -- -P chef-server -d /tmp -v 13.0.17
+if [ "${AIRGAP}" = "yes" ]; then
+  curl --retry 3 --silent --show-error -o chef-server-core.rpm "$ARTIFACTSLOCATION/chefFrontend/chef-server-core.rpm$ARTIFACTSTOKEN"
+  rpm -ivh chef-server-core.rpm
+else
+  curl -L https://omnitruck.chef.io/install.sh | bash -s -- -P chef-server -d /tmp -v 13.0.17
+fi
+
 mkdir -p /etc/opscode
 
 curl -o /etc/opscode/chef-server.rb "$SECRETSLOCATION/chef-server.rb.chefFrontend${HOSTNAME: -1}$SECRETSTOKEN"

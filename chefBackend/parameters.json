@@ -137,6 +137,9 @@
         },
         "platformUpdateDomainCount": {
             "value": 3
+        },
+        "enableAirgap": {
+          "value": "no"
         }
     }
 }
