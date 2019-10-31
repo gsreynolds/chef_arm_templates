@@ -4,10 +4,13 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-FQDN="${1:-}"
-LICENSE="${2:-}"
-SECRETSLOCATION="${3:-}"
-SECRETSTOKEN="${4:-}"
+AIRGAP="${1:-no}"
+ARTIFACTSLOCATION="${2:-}"
+ARTIFACTSTOKEN="${3:-}"
+FQDN="${4:-}"
+LICENSE="${5:-}"
+SECRETSLOCATION="${6:-}"
+SECRETSTOKEN="${7:-}"
 
 DISK="sdc"
 VG="automate"
@@ -31,13 +34,22 @@ mkfs.xfs /dev/$VG/$LV
 echo "/dev/mapper/$VG-$LV $MOUNT xfs defaults 0 0" | sudo tee -a /etc/fstab
 mount -a
 
-# Install Automate
-wget https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip
-sudo unzip chef-automate_linux_amd64.zip
 echo vm.max_map_count=262144 | sudo tee -a /etc/sysctl.conf
 echo vm.dirty_expire_centisecs=20000 | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p /etc/sysctl.conf
-sudo ./chef-automate init-config --fqdn "$FQDN"
+
+# Install Automate
+if [ "${AIRGAP}" = "yes" ]; then
+  mkdir airgap
+  curl --retry 3 --silent --show-error -o airgap/chef-automate_linux_amd64.zip "$ARTIFACTSLOCATION/automate/chef-automate_linux_amd64.zip$ARTIFACTSTOKEN"
+  curl --retry 3 --silent --show-error -o airgap/automate.aib "$ARTIFACTSLOCATION/automate/automate.aib$ARTIFACTSTOKEN"
+  sudo unzip airgap/chef-automate_linux_amd64.zip
+  sudo ./chef-automate init-config --upgrade-strategy none --fqdn "$FQDN"
+else
+  wget https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip
+  sudo unzip airgap/chef-automate_linux_amd64.zip
+  sudo ./chef-automate init-config --fqdn "$FQDN"
+fi
 
 # shellcheck disable=SC2028
 echo '
@@ -59,7 +71,12 @@ echo '
 # path = "/var/opt/chef-automate/backups"
 # ' >> config.toml
 
-sudo ./chef-automate deploy --channel current --upgrade-strategy none --accept-terms-and-mlsa config.toml
+if [ "${AIRGAP}" = "yes" ]; then
+  sudo ./chef-automate deploy --channel current --accept-terms-and-mlsa config.toml --airgap-bundle airgap/automate.aib
+else
+  sudo ./chef-automate deploy --channel current --accept-terms-and-mlsa config.toml
+fi
+
 sudo chef-automate license apply "$LICENSE"
 
 chef-automate admin-token >> data-collector-token

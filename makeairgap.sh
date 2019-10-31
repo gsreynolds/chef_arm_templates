@@ -25,5 +25,19 @@ do
 	wget --quiet https://d3g5vo6xdbdb9a.cloudfront.net/yum/noarch/${rpm} -P .airgaptmp/automateElastic
 done
 
+# Automate
+mkdir .airgaptmp/automate
+cd .airgaptmp/automate
+wget https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip
+unzip chef-automate_linux_amd64.zip
+./chef-automate airgap bundle create automate.aib
+rm ./chef-automate
+cd -
+
 echo "Upload all artifacts for automateElastic"
 find .airgaptmp/automateElastic -name '*' -type f -execdir curl --retry 3 --upload-file {} ${ARTIFACTSLOCATION}/automateElastic/{}${ARTIFACTSTOKEN} --header "x-ms-blob-type: BlockBlob" \;
+
+echo "Upload all artifacts for automateElastic"
+# FIXME: Azure File RequestBodyTooLarge for the airgap bundle
+# Use https://github.com/Azure/blobxfer, Azure Storage Explorer or other method to upload the automate.aib
+find .airgaptmp/automate -name '*.zip' -type f -execdir curl --retry 3 --upload-file {} ${ARTIFACTSLOCATION}/automate/{}${ARTIFACTSTOKEN} --header "x-ms-blob-type: BlockBlob" \;

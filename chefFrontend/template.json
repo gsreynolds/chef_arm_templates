@@ -296,7 +296,7 @@
                     },
                     "fileUris": {
                         "value": [
-                          "[concat(parameters('_artifactsLocation'), 'chefFrontend/script.sh', parameters('_artifactsLocationSasToken'))]"
+                          "[concat(parameters('_artifactsLocation'), '/chefFrontend/script.sh', parameters('_artifactsLocationSasToken'))]"
                         ]
                     },
                     "commandToExecute": {

@@ -87,6 +87,10 @@
         },
         "automateLicense": {
             "type": "string"
+        },
+        "enableAirgap": {
+            "type": "string",
+            "defaultValue": "no"
         }
     },
     "variables": {
@@ -250,11 +254,11 @@
                     },
                     "fileUris": {
                         "value": [
-                          "[concat(parameters('_artifactsLocation'), 'automate/script.sh', parameters('_artifactsLocationSasToken'))]"
+                          "[concat(parameters('_artifactsLocation'), '/automate/script.sh', parameters('_artifactsLocationSasToken'))]"
                         ]
                     },
                     "commandToExecute": {
-                        "value": "[concat('bash script.sh', ' \"', parameters('automateFQDN'), '\" \"', parameters('automateLicense'), '\"', ' \"', parameters('_secretsLocation'), '\" \"', parameters('_secretsLocationSasToken'), '\"')]"
+                        "value": "[concat('bash script.sh', ' \"', parameters('enableAirgap'), '\" \"', parameters('_artifactsLocation'), '\" \"', parameters('_artifactsLocationSasToken'), '\"', parameters('automateFQDN'), '\" \"', parameters('automateLicense'), '\"', ' \"', parameters('_secretsLocation'), '\" \"', parameters('_secretsLocationSasToken'), '\"')]"
                     }
                 }
             },
