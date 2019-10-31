@@ -43,9 +43,6 @@
         "publicIpAddressType": {
             "value": "Static"
         },
-        "dnsLabelPrefix": {
-            "value": null
-        },
         "publicIpAddressSku": {
             "value": "Standard"
         },
@@ -128,9 +125,6 @@
         },
         "adminUsername": {
             "value": "chef"
-        },
-        "adminPublicKey": {
-          "value": null
         },
         "backendCount": {
           "value": 3
