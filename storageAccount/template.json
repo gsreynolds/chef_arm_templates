@@ -11,8 +11,13 @@
         "subnetName": {
             "type": "string"
         },
-        "containerName": {
-            "type": "string"
+        "secretsContainerName": {
+            "type": "string",
+            "defaultValue": "secrets"
+        },
+        "artifactsContainerName": {
+            "type": "string",
+            "defaultValue": "artifacts"
         },
         "accountSasProperties": {
             "type": "object",
@@ -86,7 +91,19 @@
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
             "apiVersion": "2019-04-01",
-            "name": "[concat(parameters('storageAccountName'), '/default/secrets')]",
+            "name": "[concat(parameters('storageAccountName'), '/default/', parameters('secretsContainerName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ],
+            "properties": {
+                "publicAccess": "None"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2019-04-01",
+            "name": "[concat(parameters('storageAccountName'), '/default/artifacts')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
@@ -99,9 +116,17 @@
     "outputs": {
         "_secretsLocation": {
             "type": "string",
-            "value": "[concat('https://', parameters('storageAccountName'), '.blob.core.windows.net/', parameters('containerName'))]"
+            "value": "[concat('https://', parameters('storageAccountName'), '.blob.core.windows.net/', parameters('secretsContainerName'))]"
         },
         "_secretsLocationSasToken": {
+            "type": "string",
+            "value": "[concat('?', listAccountSas(parameters('storageAccountName'), '2018-07-01', parameters('accountSasProperties')).accountSasToken)]"
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "value": "[concat('https://', parameters('storageAccountName'), '.blob.core.windows.net/', parameters('artifactsContainerName'))]"
+        },
+        "_artifactsLocationSasToken": {
             "type": "string",
             "value": "[concat('?', listAccountSas(parameters('storageAccountName'), '2018-07-01', parameters('accountSasProperties')).accountSasToken)]"
         }
