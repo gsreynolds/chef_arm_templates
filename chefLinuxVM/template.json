@@ -5,9 +5,6 @@
         "location": {
             "type": "string"
         },
-        "networkInterfaceName": {
-            "type": "string"
-        },
         "networkSecurityGroupName": {
             "type": "string"
         },
@@ -18,9 +15,6 @@
             "type": "string"
         },
         "virtualNetworkName": {
-            "type": "string"
-        },
-        "publicIpAddressName": {
             "type": "string"
         },
         "publicIpAddressType": {
@@ -70,13 +64,13 @@
     },
     "resources": [
         {
-            "name": "[parameters('networkInterfaceName')]",
+            "name": "[parameters('virtualMachineName')]",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2019-07-01",
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkSecurityGroups/', parameters('networkSecurityGroupName'))]",
-                "[concat('Microsoft.Network/publicIpAddresses/', parameters('publicIpAddressName'))]"
+                "[concat('Microsoft.Network/publicIpAddresses/', parameters('virtualMachineName'))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -88,7 +82,7 @@
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIpAddress": {
-                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', parameters('virtualMachineName'))]"
                             }
                         }
                     }
@@ -108,7 +102,7 @@
             }
         },
         {
-            "name": "[parameters('publicIpAddressName')]",
+            "name": "[parameters('virtualMachineName')]",
             "type": "Microsoft.Network/publicIpAddresses",
             "apiVersion": "2019-02-01",
             "location": "[parameters('location')]",
@@ -125,7 +119,7 @@
             "apiVersion": "2019-07-01",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', parameters('networkInterfaceName'))]"
+                "[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'))]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -148,7 +142,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaceName'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('virtualMachineName'))]"
                         }
                     ]
                 },
@@ -198,7 +192,7 @@
                 "policy_group": "testing"
               },
               "hints": {
-                "vm_name": "[reference(parameters('virtualMachineName'))]"
+                "vm_name": "[parameters('virtualMachineName')]"
               }
             },
             "protectedSettings": {

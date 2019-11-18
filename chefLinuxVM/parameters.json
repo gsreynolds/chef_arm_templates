@@ -5,9 +5,6 @@
         "location": {
             "value": "northeurope"
         },
-        "networkInterfaceName": {
-            "value": "linux-chef"
-        },
         "networkSecurityGroupName": {
             "value": "linux-chef-nsg"
         },
@@ -34,17 +31,11 @@
         "virtualNetworkName": {
             "value": "chef-vnet"
         },
-        "publicIpAddressName": {
-            "value": "linux-chef-ip"
-        },
         "publicIpAddressType": {
             "value": "Dynamic"
         },
         "publicIpAddressSku": {
             "value": "Basic"
-        },
-        "virtualMachineName": {
-            "value": "linux-chef"
         },
         "osDiskType": {
             "value": "StandardSSD_LRS"
@@ -54,18 +45,6 @@
         },
         "adminUsername": {
             "value": "chef"
-        },
-        "adminPublicKey": {
-            "value": null
-        },
-        "chef_server_url": {
-          "value": null
-        },
-        "validation_client_name": {
-            "value": null
-        },
-        "validation_key": {
-          "value": null
         },
         "client_rb": {
             "value": "chef_license 'accept'\n"
