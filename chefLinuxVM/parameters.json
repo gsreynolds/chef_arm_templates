@@ -1,0 +1,80 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "networkInterfaceName": {
+            "value": "linux-chef"
+        },
+        "networkSecurityGroupName": {
+            "value": "linux-chef-nsg"
+        },
+        "networkSecurityGroupRules": {
+            "value": [
+                {
+                    "name": "SSH",
+                    "properties": {
+                        "priority": 300,
+                        "protocol": "TCP",
+                        "access": "Allow",
+                        "direction": "Inbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "22"
+                    }
+                }
+            ]
+        },
+        "subnetName": {
+            "value": "default"
+        },
+        "virtualNetworkName": {
+            "value": "chef-vnet"
+        },
+        "publicIpAddressName": {
+            "value": "linux-chef-ip"
+        },
+        "publicIpAddressType": {
+            "value": "Dynamic"
+        },
+        "publicIpAddressSku": {
+            "value": "Basic"
+        },
+        "virtualMachineName": {
+            "value": "linux-chef"
+        },
+        "osDiskType": {
+            "value": "StandardSSD_LRS"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_D2_v3"
+        },
+        "adminUsername": {
+            "value": "chef"
+        },
+        "adminPublicKey": {
+            "value": null
+        },
+        "chef_server_url": {
+          "value": null
+        },
+        "validation_client_name": {
+            "value": null
+        },
+        "validation_key": {
+          "value": null
+        },
+        "client_rb": {
+            "value": "chef_license 'accept'\n"
+        },
+        "bootstrap_version": {
+            "value": "14"
+        },
+        "ssl_verify_mode": {
+            "value": "peer"
+        }
+    }
+}
