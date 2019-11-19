@@ -42,6 +42,7 @@ do
   shift
 done
 
+log "--------------------------"
 log "Chef Frontend installation"
 log "--------------------------"
 log "AIRGAP: $AIRGAP"
@@ -83,22 +84,29 @@ mkdir -p /etc/opscode
 
 curl -o /etc/opscode/chef-server.rb "$SECRETSLOCATION/chef-server.rb.chefFrontend${HOSTNAME: -1}$SECRETSTOKEN"
 
-echo "
+tee -a /etc/opscode/chef-server.rb <<EOF
 # Data collector & compliance
 data_collector['root_url'] =  'https://automate/data-collector/v0/'
 data_collector['proxy'] = true
 profiles['root_url'] = 'https://automate'
 opscode_erchef['max_request_size'] = 2000000
 insecure_addon_compat false
-" >> /etc/opscode/chef-server.rb
+EOF
 
 if [ "${HOSTNAME: -1}" = "0" ]; then
+  log "---------------"
   echo "First frontend"
+  log "---------------"
   chef-server-ctl reconfigure --chef-license=accept
+  log "-------------"
+  log "Store Secrets"
+  log "-------------"
   curl --retry 3 --silent --show-error --upload-file /etc/opscode/private-chef-secrets.json "$SECRETSLOCATION/private-chef-secrets.json$SECRETSTOKEN" --header "x-ms-blob-type: BlockBlob"
   curl --retry 3 --silent --show-error --upload-file /var/opt/opscode/upgrades/migration-level "$SECRETSLOCATION/migration-level$SECRETSTOKEN" --header "x-ms-blob-type: BlockBlob"
 else
+  log "----------------"
   echo "Other frontends"
+  log "----------------"
   sleep 300
   curl --retry 3 --silent --show-error -o /etc/opscode/private-chef-secrets.json "$SECRETSLOCATION/private-chef-secrets.json$SECRETSTOKEN"
   mkdir -p /var/opt/opscode/upgrades/
@@ -109,5 +117,5 @@ fi
 
 # Configure data collector
 curl --retry 3 --silent --show-error -o data-collector-token "$SECRETSLOCATION/data-collector-token$SECRETSTOKEN"
-chef-server-ctl set-secret data_collector token $(cat data-collector-token)
+chef-server-ctl set-secret data_collector token "$(cat data-collector-token)"
 chef-server-ctl restart nginx && chef-server-ctl restart opscode-erchef

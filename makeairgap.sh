@@ -46,8 +46,7 @@ log "ARTIFACTSLOCATION: $ARTIFACTSLOCATION"
 log "ARTIFACTSTOKEN: $ARTIFACTSTOKEN"
 
 log "Upload all scripts"
-find . -name 'script.sh' -type f -exec curl --retry 3 --upload-file {} ${ARTIFACTSLOCATION}/{}${ARTIFACTSTOKEN} --header "x-ms-blob-type: BlockBlob" \;
-
+find . -name 'script.sh' -type f -exec curl --retry 3 --upload-file "{}" "${ARTIFACTSLOCATION}/{}${ARTIFACTSTOKEN}" --header "x-ms-blob-type: BlockBlob" \;
 mkdir -p .airgaptmp
 
 # Automate Elasticsearch cluster
@@ -60,7 +59,7 @@ odfe=( "opendistro-alerting-0.7.0.0.rpm" "opendistro-security-0.7.0.1.rpm" "open
 for rpm in "${odfe[@]}"
 do
   log "Download ${rpm}"
-	wget --quiet https://d3g5vo6xdbdb9a.cloudfront.net/yum/noarch/${rpm} -O .airgaptmp/automateElastic/${rpm} 
+	wget --quiet "https://d3g5vo6xdbdb9a.cloudfront.net/yum/noarch/${rpm}" -O ".airgaptmp/automateElastic/${rpm}"
 done
 
 # Automate
