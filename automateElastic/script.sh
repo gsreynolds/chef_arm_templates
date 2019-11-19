@@ -28,17 +28,23 @@ do
       ARTIFACTSTOKEN="$2"
     ;;
 
+    --elastic-prefix)
+      ELASTICPREFIX="$2"
+    ;;
+
   esac
 
   # move onto the next argument
   shift
 done
 
+log "---------------------------"
 log "Chef Automate ElasticSearch"
 log "---------------------------"
 log "AIRGAP: $AIRGAP"
 log "ARTIFACTSLOCATION: $ARTIFACTSLOCATION"
 log "ARTIFACTSTOKEN: $ARTIFACTSTOKEN"
+log "ELASTICPREFIX: $ELASTICPREFIX"
 
 DISK="sdc"
 VG="automateelastic"
@@ -66,17 +72,22 @@ mount -a
 # Install Java 11
 yum install -y java-11-openjdk-devel
 
-# Install Open Distro for ElasticSearch
+log "-------------------------------------"
+log "Install Open Distro for ElasticSearch"
+log "-------------------------------------"
+
 if [ "${AIRGAP}" = "yes" ]; then
-  curl --retry 3 --silent --show-error -o elasticsearch-oss-6.5.4.rpm "$ARTIFACTSLOCATION/automateElastic/elasticsearch-oss-6.5.4.rpm$ARTIFACTSTOKEN"
-  curl --retry 3 --silent --show-error -o opendistro-alerting-0.7.0.0.rpm "$ARTIFACTSLOCATION/automateElastic/opendistro-alerting-0.7.0.0.rpm$ARTIFACTSTOKEN"
-  curl --retry 3 --silent --show-error -o opendistro-security-0.7.0.1.rpm "$ARTIFACTSLOCATION/automateElastic/opendistro-security-0.7.0.1.rpm$ARTIFACTSTOKEN"
-  curl --retry 3 --silent --show-error -o opendistro-sql-0.7.0.0.rpm "$ARTIFACTSLOCATION/automateElastic/opendistro-sql-0.7.0.0.rpm$ARTIFACTSTOKEN"
-  curl --retry 3 --silent --show-error -o opendistro-performance-analyzer-0.7.0.0.rpm "$ARTIFACTSLOCATION/automateElastic/opendistro-performance-analyzer-0.7.0.0.rpm$ARTIFACTSTOKEN"
-  curl --retry 3 --silent --show-error -o opendistroforelasticsearch-0.7.0.rpm "$ARTIFACTSLOCATION/automateElastic/opendistroforelasticsearch-0.7.0.rpm$ARTIFACTSTOKEN"
-  rpm -ivh *.rpm
+  odfe=( "elasticsearch-oss-6.5.4.rpm" "opendistro-alerting-0.7.0.0.rpm" "opendistro-security-0.7.0.1.rpm" "opendistro-sql-0.7.0.0.rpm" "opendistro-performance-analyzer-0.7.0.0.rpm" "opendistroforelasticsearch-0.7.0.rpm" )
+  for rpm in "${odfe[@]}"
+  do
+    log "Download ${rpm}"
+    curl --retry 3 --silent --show-error -o "${rpm}" "${ARTIFACTSLOCATION}/automateElastic/${rpm}${ARTIFACTSTOKEN}"
+  done
+
+  rpm -ivh ./*.rpm
 else
-  echo '[elasticsearch-6.x]
+  tee /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo <<EOF
+  [elasticsearch-6.x]
   name=Elasticsearch repository for 6.x packages
   baseurl=https://artifacts.elastic.co/packages/oss-6.x/yum
   gpgcheck=1
@@ -93,24 +104,30 @@ else
   gpgcheck=1
   repo_gpgcheck=1
   autorefresh=1
-  type=rpm-md' > /etc/yum.repos.d/opendistroforelasticsearch-artifacts.repo
+  type=rpm-md
+EOF
+
   yum updateinfo -y
   yum install -y opendistroforelasticsearch-0.7.0-1
 fi
 
-# Configure ElasticSearch
-echo "
-node.name: $HOSTNAME
-" >> /etc/elasticsearch/elasticsearch.yml
+log "-----------------------"
+log "Configure ElasticSearch"
+log "-----------------------"
 
-echo '
+tee -a /etc/elasticsearch/elasticsearch.yml <<EOF
+node.name: ${HOSTNAME}
 cluster.name: chef-insights
 network.host: 0.0.0.0
-discovery.zen.ping.unicast.hosts: ["automateElastic0", "automateElastic1", "automateElastic2"]
-' >> /etc/elasticsearch/elasticsearch.yml
+discovery.zen.ping.unicast.hosts: ["${ELASTICPREFIX}0", "${ELASTICPREFIX}1", "${ELASTICPREFIX}2"]
+EOF
 
-echo '
+tee -a /etc/sysconfig/elasticsearch <<EOF
 ES_JAVA_OPTS="-Djna.tmpdir=/var/lib/elasticsearch/tmp"
-' >> /etc/sysconfig/elasticsearch
+EOF
+
+log "-------------------"
+log "Start ElasticSearch"
+log "-------------------"
 
 systemctl start elasticsearch.service

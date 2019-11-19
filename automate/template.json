@@ -91,6 +91,10 @@
         "enableAirgap": {
             "type": "string",
             "defaultValue": "no"
+        },
+        "automateElasticVirtualMachineName": {
+            "type": "string",
+            "defaultValue": "automateElastic"
         }
     },
     "variables": {
@@ -258,7 +262,7 @@
                         ]
                     },
                     "commandToExecute": {
-                        "value": "[concat('bash script.sh', ' --airgap \"', parameters('enableAirgap'), '\" --artifacts-location \"', parameters('_artifactsLocation'), '\" --artifacts-token \"', parameters('_artifactsLocationSasToken'), '\" --fqdn \"', parameters('automateFQDN'), '\" --license \"', parameters('automateLicense'), '\" --secrets-location \"', parameters('_secretsLocation'), '\" --secrets-token \"', parameters('_secretsLocationSasToken'), '\"')]"
+                        "value": "[concat('bash script.sh', ' --airgap \"', parameters('enableAirgap'), '\" --artifacts-location \"', parameters('_artifactsLocation'), '\" --artifacts-token \"', parameters('_artifactsLocationSasToken'), '\" --fqdn \"', parameters('automateFQDN'), '\" --license \"', parameters('automateLicense'), '\" --secrets-location \"', parameters('_secretsLocation'), '\" --secrets-token \"', parameters('_secretsLocationSasToken'), '\" --elastic-prefix \"', parameters('automateElasticVirtualMachineName'), '\"')]"
                     }
                 }
             },
