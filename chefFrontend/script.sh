@@ -4,11 +4,51 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-AIRGAP="${1:-no}"
-ARTIFACTSLOCATION="${2:-}"
-ARTIFACTSTOKEN="${3:-}"
-SECRETSLOCATION="${4:-}"
-SECRETSTOKEN="${5:-}"
+function log() {
+  message=$1
+
+  echo -e "${message}"
+}
+
+while [[ $# -gt 0 ]]
+do
+  key="$1"
+
+  case $key in
+
+    --airgap)
+      AIRGAP="$2"
+    ;;
+
+    --artifacts-location)
+      ARTIFACTSLOCATION="$2"
+    ;;
+
+    --artifacts-token)
+      ARTIFACTSTOKEN="$2"
+    ;;
+
+    --secrets-location)
+      SECRETSLOCATION="$2"
+    ;;
+
+    --secrets-token)
+      SECRETSTOKEN="$2"
+    ;;
+
+  esac
+
+  # move onto the next argument
+  shift
+done
+
+log "Chef Frontend installation"
+log "--------------------------"
+log "AIRGAP: $AIRGAP"
+log "ARTIFACTSLOCATION: $ARTIFACTSLOCATION"
+log "ARTIFACTSTOKEN: $ARTIFACTSTOKEN"
+log "SECRETSLOCATION: $SECRETSLOCATION"
+log "SECRETSTOKEN: $SECRETSTOKEN"
 
 DISK="sdc"
 VG="opscode"

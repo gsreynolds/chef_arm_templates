@@ -4,13 +4,61 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-AIRGAP="${1:-no}"
-ARTIFACTSLOCATION="${2:-}"
-ARTIFACTSTOKEN="${3:-}"
-FQDN="${4:-}"
-LICENSE="${5:-}"
-SECRETSLOCATION="${6:-}"
-SECRETSTOKEN="${7:-}"
+function log() {
+  message=$1
+
+  echo -e "${message}"
+}
+
+while [[ $# -gt 0 ]]
+do
+  key="$1"
+
+  case $key in
+
+    --airgap)
+      AIRGAP="$2"
+    ;;
+
+    --artifacts-location)
+      ARTIFACTSLOCATION="$2"
+    ;;
+
+    --artifacts-token)
+      ARTIFACTSTOKEN="$2"
+    ;;
+
+    --fqdn)
+      FQDN="$2"
+    ;;
+
+    --license)
+      LICENSE="$2"
+    ;;
+
+    --secrets-location)
+      SECRETSLOCATION="$2"
+    ;;
+
+    --secrets-token)
+      SECRETSTOKEN="$2"
+    ;;
+
+  esac
+
+  # move onto the next argument
+  shift
+done
+
+log "Chef Automate installation"
+log "--------------------------"
+log "AIRGAP: $AIRGAP"
+log "ARTIFACTSLOCATION: $ARTIFACTSLOCATION"
+log "ARTIFACTSTOKEN: $ARTIFACTSTOKEN"
+log "FQDN: $FQDN"
+log "LICENSE: $LICENSE"
+log "SECRETSLOCATION: $SECRETSLOCATION"
+log "SECRETSTOKEN: $SECRETSTOKEN"
 
 DISK="sdc"
 VG="automate"
