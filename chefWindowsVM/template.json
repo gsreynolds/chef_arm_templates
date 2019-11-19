@@ -55,6 +55,12 @@
         },
         "ssl_verify_mode": {
             "type": "string"
+        },
+        "policy_name": {
+            "type": "string"
+        },
+        "policy_group": {
+            "type": "string"
         }
     },
     "variables": {
@@ -182,8 +188,8 @@
               "validation_key_format": "plaintext",
               "environment_variables": {},
               "custom_json_attr": {
-                "policy_name": "base",
-                "policy_group": "testing"
+                "policy_name": "[parameters('policy_name')]",
+                "policy_group": "[parameters('policy_group')]"
               },
               "hints": {
                 "vm_name": "[parameters('virtualMachineName')]"
