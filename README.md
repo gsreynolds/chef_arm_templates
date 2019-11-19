@@ -59,13 +59,15 @@ chef-server-ctl grant-server-admin-permissions admin
 
 ### Chef Client nodes
 
-An example of using the Azure Chef extension is provided in `chefLinuxVM`:
+Examples of using the Azure Chef extension is provided in `chefLinuxVM` and `chefWindowsVM`:
 
 ```
 az group deployment create --name chefLinuxVM --resource-group RGNAMEHERE --template-file chefLinuxVM/template.json --parameters @chefLinuxVM/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
+az group deployment create --name chefWindowsVM --resource-group RGNAMEHERE --template-file chefWindowsVM/template.json --parameters @chefWindowsVM/parameters.json
 ```
 
 [Azure Chef Extension](https://github.com/chef-partners/azure-chef-extension)
+
 [Azure Quickstart Templates - Provision a Ubuntu/Centos VM and bootstrapping the Chef Agent](https://github.com/Azure/azure-quickstart-templates/tree/master/chef-json-parameters-linux-vm)
 
 ## Testing
