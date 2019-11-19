@@ -130,7 +130,7 @@ log "--------------------"
 log "Deploy Chef Automate"
 log "--------------------"
 if [ "${AIRGAP}" = "yes" ]; then
-  sudo ./chef-automate deploy --channel current --accept-terms-and-mlsa config.toml ---bundle automate.aib
+  sudo ./chef-automate deploy --channel current --accept-terms-and-mlsa config.toml --airgap-bundle automate.aib
 else
   sudo ./chef-automate deploy --channel current --accept-terms-and-mlsa config.toml
 fi
