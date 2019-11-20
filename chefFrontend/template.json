@@ -304,7 +304,7 @@
                         ]
                     },
                     "commandToExecute": {
-                        "value": "[concat('bash script.sh', ' \"', parameters('enableAirgap'), '\" \"', parameters('_artifactsLocation'), '\" \"', parameters('_artifactsLocationSasToken'), '\" \"', parameters('_secretsLocation'), '\" \"', parameters('_secretsLocationSasToken'), '\"')]"
+                        "value": "[concat('bash script.sh', ' --airgap \"', parameters('enableAirgap'), '\" --artifacts-location \"', parameters('_artifactsLocation'), '\" --artifacts-token \"', parameters('_artifactsLocationSasToken'), '\" --secrets-location \"', parameters('_secretsLocation'), '\" --secrets-token \"', parameters('_secretsLocationSasToken'), '\"')]"
                     }
                 }
             },

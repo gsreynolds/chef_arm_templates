@@ -281,7 +281,7 @@
                         ]
                     },
                     "commandToExecute": {
-                        "value": "[concat('bash script.sh', ' \"', parameters('enableAirgap'), '\" \"', parameters('_artifactsLocation'), '\" \"', parameters('_artifactsLocationSasToken'), '\"')]"
+                        "value": "[concat('bash script.sh', ' --airgap \"', parameters('enableAirgap'), '\" --artifacts-location \"', parameters('_artifactsLocation'), '\" --artifacts-token \"', parameters('_artifactsLocationSasToken'), '\" --elastic-prefix \"', parameters('virtualMachineName'), '\"')]"
                     }
                 }
             },

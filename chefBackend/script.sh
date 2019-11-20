@@ -4,11 +4,52 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-AIRGAP="${1:-no}"
-ARTIFACTSLOCATION="${2:-}"
-ARTIFACTSTOKEN="${3:-}"
-SECRETSLOCATION="${4:-}"
-SECRETSTOKEN="${5:-}"
+function log() {
+  message=$1
+
+  echo -e "${message}"
+}
+
+while [[ $# -gt 0 ]]
+do
+  key="$1"
+
+  case $key in
+
+    --airgap)
+      AIRGAP="$2"
+    ;;
+
+    --artifacts-location)
+      ARTIFACTSLOCATION="$2"
+    ;;
+
+    --artifacts-token)
+      ARTIFACTSTOKEN="$2"
+    ;;
+
+    --secrets-location)
+      SECRETSLOCATION="$2"
+    ;;
+
+    --secrets-token)
+      SECRETSTOKEN="$2"
+    ;;
+
+  esac
+
+  # move onto the next argument
+  shift
+done
+
+log "-------------------------"
+log "Chef Backend installation"
+log "-------------------------"
+log "AIRGAP: $AIRGAP"
+log "ARTIFACTSLOCATION: $ARTIFACTSLOCATION"
+log "ARTIFACTSTOKEN: $ARTIFACTSTOKEN"
+log "SECRETSLOCATION: $SECRETSLOCATION"
+log "SECRETSTOKEN: $SECRETSTOKEN"
 
 DISK="sdc"
 VG="chefbackend"
@@ -48,8 +89,13 @@ mkdir -p /etc/chef-backend
 echo "publish_address '$(hostname -i)'" >> /etc/chef-backend/chef-backend.rb
 
 if [ "${HOSTNAME: -1}" = "0" ]; then
-  echo "Initial leader"
+  log "--------------"
+  log "Initial leader"
+  log "--------------"
   chef-backend-ctl create-cluster --accept-license -y
+  log "-------------"
+  log "Store Secrets"
+  log "-------------"
   curl --retry 3 --silent --show-error --upload-file /etc/chef-backend/chef-backend-secrets.json "$SECRETSLOCATION/chef-backend-secrets.json$SECRETSTOKEN" --header "x-ms-blob-type: BlockBlob"
   for i in {0..2}
   do
@@ -57,7 +103,9 @@ if [ "${HOSTNAME: -1}" = "0" ]; then
     curl --retry 3 --silent --show-error --upload-file chef-server.rb.chefFrontend$i "$SECRETSLOCATION/chef-server.rb.chefFrontend$i$SECRETSTOKEN" --header "x-ms-blob-type: BlockBlob"
   done
 else
-  echo "Initial follower"
+  log "----------------"
+  log "Initial follower"
+  log "----------------"
   # backend1 waits 120 seconds, backend2 waits 240 seconds
   sleep "$((120 * ${HOSTNAME: -1}))"
   curl --retry 3 --silent --show-error -o chef-backend-secrets.json "$SECRETSLOCATION/chef-backend-secrets.json$SECRETSTOKEN"
