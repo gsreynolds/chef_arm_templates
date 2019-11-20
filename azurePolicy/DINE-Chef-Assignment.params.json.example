@@ -1,0 +1,23 @@
+{
+  "bootstrap_version": {
+    "value": "14"
+  },
+  "ssl_verify_mode": {
+    "value": "peer"
+  },
+  "chef_server_url": {
+    "value": "https://FQDN/organizations/ORG"
+  },
+  "validation_client_name": {
+    "value": "ORG-validator"
+  },
+  "validation_key": {
+    "value": "-----BEGIN RSA PRIVATE KEY-----\n... ... ...\n-----END RSA PRIVATE KEY-----"
+  },
+  "policy_name": {
+    "value": "base"
+  },
+  "policy_group": {
+    "value": "testing"
+  }
+}

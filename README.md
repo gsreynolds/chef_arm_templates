@@ -70,6 +70,20 @@ az group deployment create --name chefWindowsVM --resource-group RGNAMEHERE --te
 
 [Azure Quickstart Templates - Provision a Ubuntu/Centos VM and bootstrapping the Chef Agent](https://github.com/Azure/azure-quickstart-templates/tree/master/chef-json-parameters-linux-vm)
 
+### Azure Policy - deployIfNotExists
+
+An alternative to adding the Azure Chef extension via ARM templates is to define Azure Policy to add the extension using deployIfNotExists. Example policies are provided in `azurePolicy`.
+
+```
+az policy definition create --name DINE-LinuxChef --rules "$(jq .policyRule azurePolicy/DINE-LinuxChef.json)" --params "$(jq .parameters azurePolicy/DINE-LinuxChef.json)"
+
+az policy definition create --name DINE-WindowsChef --rules "$(jq .policyRule azurePolicy/DINE-WindowsChef.json)" --params "$(jq .parameters azurePolicy/DINE-WindowsChef.json)"
+
+az policy assignment create --name DINE-WindowsChef --policy DINE-WindowsChef --location northeurope --assign-identity --identity-scope /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx --role Contributor --scope '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/RGNAMEHERE' -p "$(cat azurePolicy/DINE-Chef-Assignment.params.json)"
+
+az policy assignment create --name DINE-LinuxChef --policy DINE-LinuxChef --location northeurope --assign-identity --identity-scope /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx --role Contributor --scope '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/RGNAMEHERE' -p "$(cat azurePolicy/DINE-Chef-Assignment.params.json)"
+```
+
 ## Testing
 
 InSpec profiles and runner scripts exist in the `test/` directory. (The runner scripts assume FQDNs `.northeurope.cloudapp.azure.com`)

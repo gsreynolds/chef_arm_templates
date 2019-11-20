@@ -1,0 +1,198 @@
+{
+  "mode": "All",
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.Compute/virtualMachines"
+        },
+        {
+          "field": "Microsoft.Compute/imagePublisher",
+          "equals": "MicrosoftWindowsServer"
+        },
+        {
+          "field": "Microsoft.Compute/imageOffer",
+          "equals": "WindowsServer"
+        },
+        {
+          "field": "Microsoft.Compute/imageSKU",
+          "in": [
+            "2008-R2-SP1",
+            "2008-R2-SP1-smalldisk",
+            "2012-Datacenter",
+            "2012-Datacenter-smalldisk",
+            "2012-R2-Datacenter",
+            "2012-R2-Datacenter-smalldisk",
+            "2016-Datacenter",
+            "2016-Datacenter-Server-Core",
+            "2016-Datacenter-Server-Core-smalldisk",
+            "2016-Datacenter-smalldisk",
+            "2016-Datacenter-with-Containers",
+            "2016-Datacenter-with-RDSH",
+            "2019-Datacenter",
+            "2019-Datacenter-Core",
+            "2019-Datacenter-Core-smalldisk",
+            "2019-Datacenter-with-Containers"
+          ]
+        }
+      ]
+    },
+    "then": {
+      "effect": "deployIfNotExists",
+      "details": {
+        "type": "Microsoft.Compute/virtualMachines/extensions",
+        "roleDefinitionIds": [
+          "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+        ],
+        "existenceCondition": {
+          "allOf": [
+            {
+              "field": "Microsoft.Compute/virtualMachines/extensions/type",
+              "equals": "ChefClient"
+            },
+            {
+              "field": "Microsoft.Compute/virtualMachines/extensions/publisher",
+              "equals": "Chef.Bootstrap.WindowsAzure"
+            }
+          ]
+        },
+        "deployment": {
+          "properties": {
+            "mode": "incremental",
+            "template": {
+              "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+              "contentVersion": "1.0.0.0",
+              "parameters": {
+                "hostname": {
+                  "type": "String"
+                },
+                "client_rb": {
+                  "type": "String",
+                  "defaultValue": "chef_license 'accept'\n"
+                },
+                "bootstrap_version": {
+                  "type": "String"
+                },
+                "ssl_verify_mode": {
+                  "type": "String"
+                },
+                "chef_server_url": {
+                  "type": "String"
+                },
+                "validation_client_name": {
+                  "type": "String"
+                },
+                "validation_key": {
+                  "type": "String"
+                },
+                "policy_name": {
+                  "type": "String"
+                },
+                "policy_group": {
+                  "type": "String"
+                }
+              },
+              "variables": {},
+              "resources": [
+                {
+                  "type": "Microsoft.Compute/virtualMachines/extensions",
+                  "name": "[concat(parameters('hostname'),'/WindowsChefExtension')]",
+                  "apiVersion": "2019-03-01",
+                  "location": "[resourceGroup().location]",
+                  "dependsOn": [],
+                  "properties": {
+                    "autoUpgradeMinorVersion": false,
+                    "publisher": "Chef.Bootstrap.WindowsAzure",
+                    "type": "ChefClient",
+                    "typeHandlerVersion": "1210.12",
+                    "settings": {
+                      "client_rb": "[parameters('client_rb')]",
+                      "bootstrap_version": "[parameters('bootstrap_version')]",
+                      "bootstrap_options": {
+                        "chef_node_name": "[parameters('hostname')]",
+                        "chef_server_url": "[parameters('chef_server_url')]",
+                        "validation_client_name": "[parameters('validation_client_name')]",
+                        "node_ssl_verify_mode": "[parameters('ssl_verify_mode')]"
+                      },
+                      "validation_key_format": "plaintext",
+                      "environment_parameters": {},
+                      "custom_json_attr": {
+                        "policy_name": "[parameters('policy_name')]",
+                        "policy_group": "[parameters('policy_group')]"
+                      },
+                      "hints": {
+                        "vm_name": "[parameters('hostname')]"
+                      },
+                      "daemon": "task"
+                    },
+                    "protectedSettings": {
+                      "validation_key": "[parameters('validation_key')]"
+                    }
+                  }
+                }
+              ],
+              "outputs": {}
+            },
+            "parameters": {
+              "hostname": {
+                "value": "[field('name')]"
+              },
+              "client_rb": {
+                "value": "[parameters('client_rb')]"
+              },
+              "bootstrap_version": {
+                "value": "[parameters('bootstrap_version')]"
+              },
+              "ssl_verify_mode": {
+                "value": "[parameters('ssl_verify_mode')]"
+              },
+              "chef_server_url": {
+                "value": "[parameters('chef_server_url')]"
+              },
+              "validation_client_name": {
+                "value": "[parameters('validation_client_name')]"
+              },
+              "validation_key": {
+                "value": "[parameters('validation_key')]"
+              },
+              "policy_name": {
+                "value": "[parameters('policy_name')]"
+              },
+              "policy_group": {
+                "value": "[parameters('policy_group')]"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "parameters": {
+    "client_rb": {
+      "type": "String",
+      "defaultValue": "chef_license 'accept'\n"
+    },
+    "bootstrap_version": {
+      "type": "String"
+    },
+    "ssl_verify_mode": {
+      "type": "String"
+    },
+    "chef_server_url": {
+      "type": "String"
+    },
+    "validation_client_name": {
+      "type": "String"
+    },
+    "validation_key": {
+      "type": "String"
+    },
+    "policy_name": {
+      "type": "String"
+    },
+    "policy_group": {
+      "type": "String"
+    }
+  }
+}

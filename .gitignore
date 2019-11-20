@@ -1,3 +1,4 @@
 inspec.lock
 .airgaptmp
 *.lock.json
+*.params.json
