@@ -94,7 +94,7 @@
                     "autoUpgradeMinorVersion": false,
                     "publisher": "Chef.Bootstrap.WindowsAzure",
                     "type": "LinuxChefClient",
-                    "typeHandlerVersion": "1210.12",
+                    "typeHandlerVersion": "1210.13",
                     "settings": {
                       "client_rb": "[parameters('client_rb')]",
                       "bootstrap_version": "[parameters('bootstrap_version')]",
