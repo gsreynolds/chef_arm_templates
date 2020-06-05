@@ -8,6 +8,9 @@ Templates to create:
 * 3 node Chef Backend HA cluster
 * 2 Chef Infra Server frontends
 * load balancer for Chef Infra Server frontends
+* Linux and Windows Virtual Machines with the Azure Chef Extension
+* Azure deployIfNotExists policies - to automatically add the Azure Chef Extension to Linux & Windows Virtual Machines without the extension
+* Virtual Machine Scale Sets with the Azure Chef Extension
 
 ![Overview](images/overview.svg)
 
