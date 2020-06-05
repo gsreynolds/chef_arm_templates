@@ -1,0 +1,123 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "virtualMachineScaleSetName": {
+            "value": "chefLinuxScaleSet"
+        },
+        "singlePlacementGroup": {
+            "value": "false"
+        },
+        "instanceSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "instanceCount": {
+            "value": "3"
+        },
+        "upgradeMode": {
+            "value": "Manual"
+        },
+        "priority": {
+            "value": "Regular"
+        },
+        "enableAcceleratedNetworking": {
+            "value": "false"
+        },
+        "subnetName": {
+            "value": "default"
+        },
+        "osDiskType": {
+            "value": "Premium_LRS"
+        },
+        "addressPrefixes": {
+            "value": [
+                "10.2.2.0/24"
+            ]
+        },
+        "subnets": {
+            "value": [
+                {
+                    "name": "default",
+                    "properties": {
+                        "addressPrefix": "10.2.2.0/24"
+                    }
+                }
+            ]
+        },
+        "virtualNetworkName": {
+            "value": "chef-vnet"
+        },
+        "networkSecurityGroupName": {
+          "value": "chefLinuxScaleSet-nsg"
+        },
+        "networkSecurityGroupRules": {
+            "value": []
+        },
+        "networkInterfaceConfigurations": {
+            "value": [
+                {
+                    "name": "vnet-nic01",
+                    "primary": true,
+                    "applicationGatewayBackendAddressPools": [],
+                    "loadBalancerBackendAddressPools": [],
+                    "applicationSecurityGroups": [],
+                    "loadBalancerInboundNatPools": [],
+                    "enableAcceleratedNetworking": false,
+                    "pipName": ""
+                }
+            ]
+        },
+        "vmName": {
+            "value": "linuxScaleSet"
+        },
+        "scaleInPolicy": {
+            "value": {
+                "rules": [
+                    "Default"
+                ]
+            }
+        },
+        "upgradePolicy": {
+            "value": "Automatic"
+        },
+        "adminUsername": {
+            "value": "chef"
+        },
+        "adminPublicKey": {
+            "value": null
+        },
+        "healthExtensionProtocol": {
+            "value": "tcp"
+        },
+        "healthExtensionPort": {
+            "value": 22
+        },
+        "autoRepairsPolicyEnabled": {
+            "value": false
+        },
+        "gracePeriod": {
+            "value": "PT30M"
+        },
+        "platformFaultDomainCount": {
+            "value": "1"
+        },
+        "client_rb": {
+            "value": "chef_license 'accept'\n"
+        },
+        "bootstrap_version": {
+            "value": "15"
+        },
+        "ssl_verify_mode": {
+            "value": "peer"
+        },
+        "policy_name": {
+            "value": "base"
+        },
+        "policy_group": {
+            "value": "testing"
+        }
+    }
+}

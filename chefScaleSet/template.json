@@ -1,0 +1,241 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "virtualMachineScaleSetName": {
+            "type": "string"
+        },
+        "singlePlacementGroup": {
+            "type": "string"
+        },
+        "instanceSize": {
+            "type": "string"
+        },
+        "instanceCount": {
+            "type": "string"
+        },
+        "upgradeMode": {
+            "type": "string"
+        },
+        "priority": {
+            "type": "string"
+        },
+        "enableAcceleratedNetworking": {
+            "type": "string"
+        },
+        "subnetName": {
+            "type": "string"
+        },
+        "osDiskType": {
+            "type": "string"
+        },
+        "addressPrefixes": {
+            "type": "array"
+        },
+        "subnets": {
+            "type": "array"
+        },
+        "virtualNetworkName": {
+            "type": "string"
+        },
+        "networkSecurityGroupName": {
+          "type": "string"
+        },
+        "networkSecurityGroupRules": {
+            "type": "array"
+        },
+        "networkInterfaceConfigurations": {
+            "type": "array"
+        },
+        "vmName": {
+            "type": "string"
+        },
+        "scaleInPolicy": {
+            "type": "object"
+        },
+        "upgradePolicy": {
+            "type": "string"
+        },
+        "adminUsername": {
+            "type": "string"
+        },
+        "adminPublicKey": {
+            "type": "secureString"
+        },
+        "healthExtensionProtocol": {
+            "type": "string"
+        },
+        "healthExtensionPort": {
+            "type": "int"
+        },
+        "autoRepairsPolicyEnabled": {
+            "type": "bool"
+        },
+        "gracePeriod": {
+            "type": "string"
+        },
+        "platformFaultDomainCount": {
+            "type": "string"
+        },
+        "chef_server_url": {
+            "type": "string"
+        },
+        "validation_client_name": {
+            "type": "string"
+        },
+        "validation_key": {
+            "type": "string"
+        },
+        "client_rb": {
+            "type": "string"
+        },
+        "bootstrap_version": {
+            "type": "string"
+        },
+        "ssl_verify_mode": {
+            "type": "string"
+        },
+        "policy_name": {
+            "type": "string"
+        },
+        "policy_group": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "storageApiVersion": "2019-06-01",
+        "namingInfix": "[toLower(substring(concat(parameters('virtualMachineScaleSetName'), uniqueString(resourceGroup().id)), 0, 9))]",
+        "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]",
+        "vnetId": "[resourceId(resourceGroup().name,'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]"
+    },
+    "resources": [
+          {
+            "name": "[parameters('networkSecurityGroupName')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2019-02-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "securityRules": "[parameters('networkSecurityGroupRules')]"
+            }
+        },
+        {
+            "name": "[parameters('virtualMachineScaleSetName')]",
+            "type": "Microsoft.Compute/virtualMachineScaleSets",
+            "apiVersion": "2019-07-01",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('networkSecurityGroupName'))]"
+            ],
+            "sku": {
+                "name": "[parameters('instanceSize')]",
+                "capacity": "[int(parameters('instanceCount'))]"
+            },
+            "properties": {
+                "overprovision": "true",
+                "upgradePolicy": {
+                    "mode": "[parameters('upgradePolicy')]"
+                },
+                "singlePlacementGroup": "[parameters('singlePlacementGroup')]",
+                "virtualMachineProfile": {
+                    "storageProfile": {
+                        "osDisk": {
+                            "createOption": "fromImage",
+                            "caching": "ReadWrite",
+                            "managedDisk": {
+                                "storageAccountType": "[parameters('osDiskType')]"
+                            }
+                        },
+                        "imageReference": {
+                            "publisher": "RedHat",
+                            "offer": "RHEL",
+                            "sku": "7-LVM",
+                            "version": "latest"
+                        }
+                    },
+                    "priority": "[parameters('priority')]",
+                    "networkProfile": {
+                        "copy": [
+                            {
+                                "name": "networkInterfaceConfigurations",
+                                "count": "[length(parameters('networkInterfaceConfigurations'))]",
+                                "input": {
+                                    "name": "[concat(resourceGroup().name, parameters('networkInterfaceConfigurations')[copyIndex('networkInterfaceConfigurations')].name)]",
+                                    "properties": {
+                                        "primary": "[parameters('networkInterfaceConfigurations')[copyIndex('networkInterfaceConfigurations')].primary]",
+                                        "enableAcceleratedNetworking": "[parameters('networkInterfaceConfigurations')[copyIndex('networkInterfaceConfigurations')].enableAcceleratedNetworking]",
+                                        "ipConfigurations": [
+                                            {
+                                                "name": "[concat(parameters('networkInterfaceConfigurations')[copyIndex('networkInterfaceConfigurations')].name, '-defaultIpConfiguration')]",
+                                                "properties": {
+                                                    "subnet": {
+                                                      "id": "[variables('subnetRef')]"
+                                                    },
+                                                    "primary": "[parameters('networkInterfaceConfigurations')[copyIndex('networkInterfaceConfigurations')].primary]",
+                                                    "applicationGatewayBackendAddressPools": "[parameters('networkInterfaceConfigurations')[copyIndex('networkInterfaceConfigurations')].applicationGatewayBackendAddressPools]",
+                                                    "loadBalancerBackendAddressPools": "[parameters('networkInterfaceConfigurations')[copyIndex('networkInterfaceConfigurations')].loadBalancerBackendAddressPools]",
+                                                    "loadBalancerInboundNatPools": "[parameters('networkInterfaceConfigurations')[copyIndex('networkInterfaceConfigurations')].loadBalancerInboundNatPools]",
+                                                    "publicIPAddressConfiguration": "[if( equals( parameters('networkInterfaceConfigurations')[copyIndex('networkInterfaceConfigurations')].pipName, ''), json('null'), union(json(concat('{\"name\": \"', parameters('networkInterfaceConfigurations')[copyIndex('networkInterfaceConfigurations')].pipName, '\"}'))\n                        ,json('{\"properties\": { \"idleTimeoutInMinutes\": 15}}')))]"
+                                                }
+                                            }
+                                        ],
+                                        "networkSecurityGroup": {
+                                          "id": "[variables('nsgId')]"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "extensionProfile": {
+                        "extensions": [
+                            {
+                                "name": "HealthExtension",
+                                "properties": {
+                                    "publisher": "Microsoft.ManagedServices",
+                                    "type": "ApplicationHealthLinux",
+                                    "typeHandlerVersion": "1.0",
+                                    "autoUpgradeMinorVersion": false,
+                                    "settings": {
+                                        "protocol": "[parameters('healthExtensionProtocol')]",
+                                        "port": "[parameters('healthExtensionPort')]"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "osProfile": {
+                        "computerNamePrefix": "[variables('namingInfix')]",
+                        "adminUsername": "[parameters('adminUsername')]",
+                        "linuxConfiguration": {
+                            "disablePasswordAuthentication": true,
+                            "ssh": {
+                                "publicKeys": [
+                                    {
+                                        "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
+                                        "keyData": "[parameters('adminPublicKey')]"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "scaleInPolicy": "[parameters('scaleInPolicy')]",
+                "automaticRepairsPolicy": {
+                    "enabled": "[parameters('autoRepairsPolicyEnabled')]",
+                    "gracePeriod": "[parameters('gracePeriod')]"
+                },
+                "platformFaultDomainCount": "[parameters('platformFaultDomainCount')]"
+            }
+        }
+    ],
+    "outputs": {
+        "adminUsername": {
+            "type": "string",
+            "value": "[parameters('adminUsername')]"
+        }
+    }
+}
