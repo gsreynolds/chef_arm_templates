@@ -20,13 +20,13 @@ Templates to create:
 ## Usage
 
 ```
-az group deployment create --name vnet --resource-group RGNAMEHERE --template-file vnet/template.json --parameters @vnet/parameters.json
-az group deployment create --name storageAccount --resource-group RGNAMEHERE --template-file storageAccount/template.json --parameters @storageAccount/parameters.json
-az group deployment create --name automateElastic --resource-group RGNAMEHERE --template-file automateElastic/template.json --parameters @automateElastic/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
-az group deployment create --name automate --resource-group RGNAMEHERE --template-file automate/template.json --parameters @automate/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
-az group deployment create --name chefLB --resource-group RGNAMEHERE --template-file chefLB/template.json --parameters=@chefLB/parameters.json
-az group deployment create --name chefBackend --resource-group RGNAMEHERE --template-file chefBackend/template.json --parameters @chefBackend/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
-az group deployment create --name chefFrontend --resource-group RGNAMEHERE --template-file chefFrontend/template.json --parameters @chefFrontend/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
+az deployment group create --name vnet --resource-group RGNAMEHERE --template-file vnet/template.json --parameters @vnet/parameters.json
+az deployment group create --name storageAccount --resource-group RGNAMEHERE --template-file storageAccount/template.json --parameters @storageAccount/parameters.json
+az deployment group create --name automateElastic --resource-group RGNAMEHERE --template-file automateElastic/template.json --parameters @automateElastic/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
+az deployment group create --name automate --resource-group RGNAMEHERE --template-file automate/template.json --parameters @automate/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
+az deployment group create --name chefLB --resource-group RGNAMEHERE --template-file chefLB/template.json --parameters=@chefLB/parameters.json
+az deployment group create --name chefBackend --resource-group RGNAMEHERE --template-file chefBackend/template.json --parameters @chefBackend/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
+az deployment group create --name chefFrontend --resource-group RGNAMEHERE --template-file chefFrontend/template.json --parameters @chefFrontend/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
 ```
 
 ### Airgap
@@ -59,16 +59,26 @@ chef-server-ctl grant-server-admin-permissions admin
 
 ### Chef Client nodes
 
-Examples of using the Azure Chef extension is provided in `chefLinuxVM` and `chefWindowsVM`:
+Examples of using the Azure Chef extension is provided in the `template_with_extension.json` template file in `chefLinuxVM` and `chefWindowsVM`:
 
 ```
-az group deployment create --name chefLinuxVM --resource-group RGNAMEHERE --template-file chefLinuxVM/template.json --parameters @chefLinuxVM/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
-az group deployment create --name chefWindowsVM --resource-group RGNAMEHERE --template-file chefWindowsVM/template.json --parameters @chefWindowsVM/parameters.json
+az deployment group create --name chefLinuxVM --resource-group RGNAMEHERE --template-file chefLinuxVM/template_with_extension.json --parameters @chefLinuxVM/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/KEYNAMEHERE.pub)"
+az deployment group create --name chefWindowsVM --resource-group RGNAMEHERE --template-file chefWindowsVM/template_with_extension.json --parameters @chefWindowsVM/parameters.json
 ```
 
 [Azure Chef Extension](https://github.com/chef-partners/azure-chef-extension)
 
 [Azure Quickstart Templates - Provision a Ubuntu/Centos VM and bootstrapping the Chef Agent](https://github.com/Azure/azure-quickstart-templates/tree/master/chef-json-parameters-linux-vm)
+
+The `template.json` files are intended for use with Azure Policy - deployIfNotExists below.
+
+### Virtual Machine Scale Sets
+
+An example of using the Azure Chef extension is provided in `chefScaleSet:
+
+```
+az deployment group create --name chefLinuxScaleSet --resource-group RGNAMEHERE --template-file chefScaleSet/template.json --parameters @chefScaleSet/parameters.json --parameters adminPublicKey="$(cat ~/.ssh/azure-greynolds.pub)"
+```
 
 ### Azure Policy - deployIfNotExists
 
