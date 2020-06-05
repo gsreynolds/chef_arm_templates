@@ -81,7 +81,7 @@
                         "properties": {
                             "protocol": "Https",
                             "port": 443,
-                            "requestPath": "/",
+                            "requestPath": "/_status",
                             "intervalInSeconds": 5,
                             "numberOfProbes": 2
                         }
