@@ -94,6 +94,8 @@ az policy assignment create --name DINE-WindowsChef --policy DINE-WindowsChef --
 az policy assignment create --name DINE-LinuxChef --policy DINE-LinuxChef --location northeurope --assign-identity --identity-scope /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx --role Contributor --scope '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/RGNAMEHERE' -p "$(cat azurePolicy/DINE-Chef-Assignment.params.json)"
 ```
 
+If you wish to use Azure Policy with Virtual Machine Scale Sets, you would need to create additional DINE policies that targeted `Microsoft.Compute/virtualMachineScaleSets` instead of `Microsoft.Compute/virtualMachines`. Please see the [Azure Policy built-in policy definitions for Azure virtual machine scale sets](https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/policy-samples) for examples of adding extensions to Virtual Machine Scale Sets using Azure Policy.
+
 ## Testing
 
 InSpec profiles and runner scripts exist in the `test/` directory. (The runner scripts assume FQDNs `.northeurope.cloudapp.azure.com`)
