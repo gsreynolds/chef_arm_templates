@@ -45,21 +45,6 @@
         },
         "adminUsername": {
             "value": "chef"
-        },
-        "client_rb": {
-            "value": "chef_license 'accept'\n"
-        },
-        "bootstrap_version": {
-            "value": "14"
-        },
-        "ssl_verify_mode": {
-            "value": "peer"
-        },
-        "policy_name": {
-            "value": "base"
-        },
-        "policy_group": {
-            "value": "testing"
         }
     }
 }

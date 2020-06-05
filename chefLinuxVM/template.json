@@ -37,30 +37,6 @@
         },
         "adminPublicKey": {
             "type": "secureString"
-        },
-        "chef_server_url": {
-            "type": "string"
-        },
-        "validation_client_name": {
-            "type": "string"
-        },
-        "validation_key": {
-            "type": "string"
-        },
-        "client_rb": {
-            "type": "string"
-        },
-        "bootstrap_version": {
-            "type": "string"
-        },
-        "ssl_verify_mode": {
-            "type": "string"
-        },
-        "policy_name": {
-            "type": "string"
-        },
-        "policy_group": {
-            "type": "string"
         }
     },
     "variables": {
@@ -168,43 +144,6 @@
                     }
                 }
             }
-        },
-        {
-          "type": "Microsoft.Compute/virtualMachines/extensions",
-          "name": "[concat(parameters('virtualMachineName'),'/LinuxChefExtension')]",
-          "apiVersion": "2019-03-01",
-          "location": "[parameters('location')]",
-          "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
-          ],
-          "properties": {
-            "autoUpgradeMinorVersion": false,
-            "publisher": "Chef.Bootstrap.WindowsAzure",
-            "type": "LinuxChefClient",
-            "typeHandlerVersion": "1210.12",
-            "settings": {
-              "client_rb": "[parameters('client_rb')]",
-              "bootstrap_version": "[parameters('bootstrap_version')]",
-              "bootstrap_options": {
-                "chef_node_name": "[parameters('virtualMachineName')]",
-                "chef_server_url": "[parameters('chef_server_url')]",
-                "validation_client_name": "[parameters('validation_client_name')]",
-                "node_ssl_verify_mode": "[parameters('ssl_verify_mode')]"
-              },
-              "validation_key_format": "plaintext",
-              "environment_variables": {},
-              "custom_json_attr": {
-                "policy_name": "[parameters('policy_name')]",
-                "policy_group": "[parameters('policy_group')]"
-              },
-              "hints": {
-                "vm_name": "[parameters('virtualMachineName')]"
-              }
-            },
-            "protectedSettings": {
-              "validation_key": "[parameters('validation_key')]"
-            }
-          }
         }
     ],
     "outputs": {
