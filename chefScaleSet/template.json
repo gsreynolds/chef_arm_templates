@@ -204,6 +204,43 @@
                                         "port": "[parameters('healthExtensionPort')]"
                                     }
                                 }
+                            },
+                            {
+                              "type": "Microsoft.Compute/virtualMachines/extensions",
+                              "name": "[concat(parameters('virtualMachineName'),'/LinuxChefExtension')]",
+                              "apiVersion": "2019-03-01",
+                              "location": "[parameters('location')]",
+                              "dependsOn": [
+                                "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
+                              ],
+                              "properties": {
+                                "autoUpgradeMinorVersion": false,
+                                "publisher": "Chef.Bootstrap.WindowsAzure",
+                                "type": "LinuxChefClient",
+                                "typeHandlerVersion": "1210.13",
+                                "settings": {
+                                  "client_rb": "[parameters('client_rb')]",
+                                  "bootstrap_version": "[parameters('bootstrap_version')]",
+                                  "bootstrap_options": {
+                                    "chef_node_name": "[parameters('virtualMachineName')]",
+                                    "chef_server_url": "[parameters('chef_server_url')]",
+                                    "validation_client_name": "[parameters('validation_client_name')]",
+                                    "node_ssl_verify_mode": "[parameters('ssl_verify_mode')]"
+                                  },
+                                  "validation_key_format": "plaintext",
+                                  "environment_variables": {},
+                                  "custom_json_attr": {
+                                    "policy_name": "[parameters('policy_name')]",
+                                    "policy_group": "[parameters('policy_group')]"
+                                  },
+                                  "hints": {
+                                    "vm_name": "[parameters('virtualMachineName')]"
+                                  }
+                                },
+                                "protectedSettings": {
+                                  "validation_key": "[parameters('validation_key')]"
+                                }
+                              }
                             }
                         ]
                     },
