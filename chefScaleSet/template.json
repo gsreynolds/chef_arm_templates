@@ -207,12 +207,7 @@
                             },
                             {
                               "type": "Microsoft.Compute/virtualMachines/extensions",
-                              "name": "[concat(parameters('virtualMachineName'),'/LinuxChefExtension')]",
-                              "apiVersion": "2019-03-01",
-                              "location": "[parameters('location')]",
-                              "dependsOn": [
-                                "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
-                              ],
+                              "name": "LinuxChefExtension",
                               "properties": {
                                 "autoUpgradeMinorVersion": false,
                                 "publisher": "Chef.Bootstrap.WindowsAzure",
@@ -222,7 +217,6 @@
                                   "client_rb": "[parameters('client_rb')]",
                                   "bootstrap_version": "[parameters('bootstrap_version')]",
                                   "bootstrap_options": {
-                                    "chef_node_name": "[parameters('virtualMachineName')]",
                                     "chef_server_url": "[parameters('chef_server_url')]",
                                     "validation_client_name": "[parameters('validation_client_name')]",
                                     "node_ssl_verify_mode": "[parameters('ssl_verify_mode')]"
@@ -232,9 +226,6 @@
                                   "custom_json_attr": {
                                     "policy_name": "[parameters('policy_name')]",
                                     "policy_group": "[parameters('policy_group')]"
-                                  },
-                                  "hints": {
-                                    "vm_name": "[parameters('virtualMachineName')]"
                                   }
                                 },
                                 "protectedSettings": {
