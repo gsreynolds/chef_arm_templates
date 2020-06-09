@@ -50,7 +50,7 @@
             "value": "chef_license 'accept'\n"
         },
         "bootstrap_version": {
-            "value": "14"
+            "value": "15"
         },
         "ssl_verify_mode": {
             "value": "peer"
