@@ -183,6 +183,7 @@
             "type": "LinuxChefClient",
             "typeHandlerVersion": "1210.13",
             "settings": {
+              "chef_package_url": "https://chefpackages.blob.core.windows.net/client/chef-15.12.22-1.el7.x86_64.rpm",
               "client_rb": "[parameters('client_rb')]",
               "bootstrap_version": "[parameters('bootstrap_version')]",
               "bootstrap_options": {

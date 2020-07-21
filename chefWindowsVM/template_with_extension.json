@@ -177,6 +177,7 @@
             "type": "ChefClient",
             "typeHandlerVersion": "1210.13",
             "settings": {
+              "chef_package_url": "https://chefpackages.blob.core.windows.net/client/chef-client-15.12.22-1-x64.msi",
               "client_rb": "[parameters('client_rb')]",
               "bootstrap_version": "[parameters('bootstrap_version')]",
               "bootstrap_options": {
