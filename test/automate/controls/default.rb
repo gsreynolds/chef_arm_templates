@@ -11,7 +11,7 @@ control 'automate-es-gateway' do
   describe command('curl -XGET http://localhost:10144') do
     its('exit_status') { should eq 0 }
     its('stdout') { should match ('"cluster_name" : "chef-insights"') }
-    its('stdout') { should match ('"number" : "6.5.4"') }
+    its('stdout') { should match ('"number" : "6.8.12"') }
   end
 
   describe command('curl -XGET http://localhost:10144/_cat/nodes?v') do

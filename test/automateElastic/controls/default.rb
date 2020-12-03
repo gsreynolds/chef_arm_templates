@@ -11,7 +11,7 @@ control 'automate-elastic' do
   describe command('curl -XGET https://localhost:9200 -u admin:admin --insecure') do
     its('exit_status') { should eq 0 }
     its('stdout') { should match ('"cluster_name" : "chef-insights"') }
-    its('stdout') { should match ('"number" : "6.5.4"') }
+    its('stdout') { should match ('"number" : "6.8.12"') }
   end
 
   describe command('curl -XGET https://localhost:9200/_cat/nodes?v -u admin:admin --insecure') do

@@ -53,9 +53,9 @@ mkdir -p .airgaptmp
 mkdir -p .airgaptmp/automateElastic
 
 log "Download elasticsearch-oss"
-wget --quiet https://artifacts.elastic.co/packages/oss-6.x/yum/6.5.4/elasticsearch-oss-6.5.4.rpm -O .airgaptmp/automateElastic/elasticsearch-oss-6.5.4.rpm
+wget --quiet https://artifacts.elastic.co/packages/oss-6.x/yum/6.8.12/elasticsearch-oss-6.8.12.rpm -O .airgaptmp/automateElastic/elasticsearch-oss-6.8.12.rpm
 
-odfe=( "opendistro-alerting-0.7.0.0.rpm" "opendistro-security-0.7.0.1.rpm" "opendistro-sql-0.7.0.0.rpm" "opendistro-performance-analyzer-0.7.0.0.rpm" "opendistroforelasticsearch-0.7.0.rpm" )
+odfe=( "opendistro-alerting-0.10.0.0.rpm" "opendistro-security-0.10.0.0.rpm" "opendistro-sql-0.9.0.0.rpm" "opendistro-performance-analyzer-0.9.0.0.rpm" "opendistroforelasticsearch-0.10.0.rpm" )
 for rpm in "${odfe[@]}"
 do
   log "Download ${rpm}"
