@@ -77,7 +77,7 @@ log "Install Open Distro for ElasticSearch"
 log "-------------------------------------"
 
 if [ "${AIRGAP}" = "yes" ]; then
-  odfe=( "elasticsearch-oss-6.8.12.rpm" "opendistro-alerting-0.7.0.0.rpm" "opendistro-security-0.7.0.1.rpm" "opendistro-sql-0.7.0.0.rpm" "opendistro-performance-analyzer-0.7.0.0.rpm" "opendistroforelasticsearch-0.7.0.rpm" )
+  odfe=( "opendistro-security-0.10.1.2.rpm" )
   for rpm in "${odfe[@]}"
   do
     log "Download ${rpm}"
@@ -108,7 +108,7 @@ else
 EOF
 
   yum updateinfo -y
-  yum install -y opendistroforelasticsearch-0.7.0-1
+  yum install -y opendistro-security-0.10.1.2-0
 fi
 
 log "-----------------------"

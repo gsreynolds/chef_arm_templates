@@ -53,9 +53,9 @@ mkdir -p .airgaptmp
 mkdir -p .airgaptmp/automateElastic
 
 log "Download elasticsearch-oss"
-wget --quiet https://artifacts.elastic.co/packages/oss-6.x/yum/6.8.12/elasticsearch-oss-6.8.12.rpm -O .airgaptmp/automateElastic/elasticsearch-oss-6.8.12.rpm
+wget --quiet https://artifacts.elastic.co/packages/oss-6.x/yum/6.8.6/elasticsearch-oss-6.8.6.rpm -O .airgaptmp/automateElastic/elasticsearch-oss-6.8.6.rpm
 
-odfe=( "opendistro-alerting-0.10.0.0.rpm" "opendistro-security-0.10.0.0.rpm" "opendistro-sql-0.9.0.0.rpm" "opendistro-performance-analyzer-0.9.0.0.rpm" "opendistroforelasticsearch-0.10.0.rpm" )
+odfe=( "opendistro-security-0.10.1.2.rpm" )
 for rpm in "${odfe[@]}"
 do
   log "Download ${rpm}"
@@ -73,11 +73,11 @@ cd -
 
 # Chef Backend
 mkdir -p .airgaptmp/chefBackend
-wget https://packages.chef.io/files/stable/chef-backend/2.0.30/el/7/chef-backend-2.0.30-1.el7.x86_64.rpm -O .airgaptmp/chefBackend/chef-backend.rpm
+wget https://packages.chef.io/files/stable/chef-backend/2.2.0/el/7/chef-backend-2.2.0-1.el7.x86_64.rpm -O .airgaptmp/chefBackend/chef-backend.rpm
 
 # Chef Frontend
 mkdir -p .airgaptmp/chefFrontend
-wget https://packages.chef.io/files/stable/chef-server/13.0.17/el/7/chef-server-core-13.0.17-1.el7.x86_64.rpm -O .airgaptmp/chefFrontend/chef-server-core.rpm
+wget https://packages.chef.io/files/stable/chef-server/13.2.0/el/7/chef-server-core-13.2.0-1.el7.x86_64.rpm -O .airgaptmp/chefFrontend/chef-server-core.rpm
 
 log "Upload the .airgaptmp directory to your _artifactsLocation ${ARTIFACTSLOCATION}"
 
